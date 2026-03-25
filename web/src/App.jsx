@@ -12,6 +12,12 @@ const CATEGORIES = [
     { id: 'electric', label: 'ЭЛЕКТРО' }
 ];
 
+const getFullImgUrl = (url) => {
+    if (!url) return `https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80`;
+    if (url.startsWith('http')) return url;
+    return API_BASE.replace('/api', '/images/') + url;
+};
+
 function App() {
     const [activeTab, setActiveTab] = useState('catalog');
     const [user, setUser] = useState(null);
@@ -256,7 +262,7 @@ const AdminPanel = ({ products, onUpdate }) => {
             <div style={{ display: 'grid' }}>
                 {products.length === 0 ? <p style={{ textAlign: 'center', padding: '40px', color: '#ccc' }}>Товаров пока нет</p> : products.map(p => (
                     <div key={p.id} className="admin-row-v2" style={{ alignItems: 'flex-start' }}>
-                        <img src={p.imageUrl || 'https://via.placeholder.com/80'} style={{ width: '60px', height: '60px', borderRadius: '14px', objectFit: 'cover', border: '1px solid #eee', marginTop: '10px' }} />
+                        <img src={getFullImgUrl(p.imageUrl)} style={{ width: '60px', height: '60px', borderRadius: '14px', objectFit: 'cover', border: '1px solid #eee', marginTop: '10px' }} />
                         {editMode === p.id ? (
                             <div style={{ gridColumn: '2 / span 4', display: 'grid' }}>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '10px' }}>
@@ -327,7 +333,7 @@ const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrde
             {products.length === 0 ? <p style={{ padding: '60px 0', fontSize: '18px', color: '#ccc' }}>В этой категории товаров пока нет</p> : products.map(p => (
                 <div key={p.id} className="bike-card">
                     <div className="stock-badge">{p.stock > 0 ? `STOCK: ${p.stock}` : 'SOLD OUT'}</div>
-                    <img src={p.imageUrl || `https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80`} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
+                    <img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
                     <div className="bike-info">
                         <span style={{ fontSize: '10px', color: '#999', fontWeight: 800, textTransform: 'uppercase' }}>{p.category || 'city'}</span>
                         <h3 style={{ margin: '4px 0 10px 0' }}>{p.name}</h3>
@@ -430,7 +436,7 @@ const Cart = ({ items, onUpdate, onRemove, onCheckout }) => (
 );
 
 const Favorites = ({ items, onAdd, onRemove }) => (
-    <div style={{ padding: '40px 0' }}><h1>Избранное ({items.length})</h1><div className="catalog-grid" style={{ marginTop: '48px' }}>{items.map(p => (<div key={p.id} className="bike-card"><img src={p.imageUrl || `https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80`} style={{ width: '100%', height: '220px', objectFit: 'cover' }} /><div className="bike-info"><h3>{p.name}</h3><p style={{ fontWeight: 800 }}>{p.price.toLocaleString()} ₽</p><div className="card-actions"><button className="btn" style={{ width: '100%', marginTop: '10px', height: '45px', fontWeight: 900, borderRadius: '14px' }} onClick={() => onAdd(p)}>В КОРЗИНУ</button><div className="fav-heart" style={{ borderRadius: '14px' }} onClick={() => onRemove(p)}><X size={18} color="#e74c3c" /></div></div></div></div>))}</div></div>
+    <div style={{ padding: '40px 0' }}><h1>Избранное ({items.length})</h1><div className="catalog-grid" style={{ marginTop: '48px' }}>{items.map(p => (<div key={p.id} className="bike-card"><img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '220px', objectFit: 'cover' }} /><div className="bike-info"><h3>{p.name}</h3><p style={{ fontWeight: 800 }}>{p.price.toLocaleString()} ₽</p><div className="card-actions"><button className="btn" style={{ width: '100%', marginTop: '10px', height: '45px', fontWeight: 900, borderRadius: '14px' }} onClick={() => onAdd(p)}>В КОРЗИНУ</button><div className="fav-heart" style={{ borderRadius: '14px' }} onClick={() => onRemove(p)}><X size={18} color="#e74c3c" /></div></div></div></div>))}</div></div>
 );
 
 export default App;
