@@ -113,43 +113,27 @@ function App() {
         });
 
     return (
-        <div className="app bg-surface text-on-surface antialiased overflow-x-hidden min-h-screen">
-            <nav className="fixed top-0 w-full z-50 glass-nav">
-                <div className="flex justify-between items-center w-full px-8 py-6 max-w-[1920px] mx-auto">
-                    <div className="text-2xl font-black tracking-tighter text-zinc-900 cursor-pointer" onClick={() => { setActiveTab('catalog'); setSelectedCat('all'); }}>KINETIC</div>
-                    <div className="hidden md:flex gap-8 items-center">
-                        <a
-                            className={`font-['Inter'] tracking-tight font-medium uppercase text-xs cursor-pointer transition-all ${activeTab === 'catalog' ? 'text-[#006d35] border-b-2 border-[#00e676] pb-1' : 'text-zinc-400 hover:text-zinc-900'}`}
-                            onClick={() => setActiveTab('catalog')}
-                        >
-                            Каталог
-                        </a>
+        <div className="app">
+            <header className="container" style={{ padding: '24px 0', borderBottom: '1px solid #f9f9f9' }}>
+                <div className="logo" style={{ fontSize: '20px', fontWeight: '900', letterSpacing: '-1px', cursor: 'pointer' }} onClick={() => { setActiveTab('catalog'); setSelectedCat('all'); }}>BIKE SHOP</div>
+                <nav style={{ gap: '35px', alignItems: 'center' }}>
+                    <a href="#" className={activeTab === 'catalog' ? 'active' : ''} style={{ fontSize: '13px', fontWeight: 700 }} onClick={() => setActiveTab('catalog')}>КАТАЛОГ</a>
+                    <a href="#" className={activeTab === 'favorites' ? 'active' : ''} style={{ fontSize: '13px', fontWeight: 700 }} onClick={() => setActiveTab('favorites')}>ИЗБРАННОЕ</a>
+                    <div className="cart-icon" onClick={() => setActiveTab('cart')}>
+                        <ShoppingCart size={20} color={activeTab === 'cart' ? 'black' : '#ccc'} />
+                        {cart.length > 0 && <span className="badge" style={{ width: '16px', height: '16px', fontSize: '9px', background: '#000', top: '-8px', right: '-8px' }}>{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
                     </div>
-                    <div className="flex gap-6 items-center">
-                        <button className="hover:opacity-80 transition-opacity relative" onClick={() => setActiveTab('favorites')}>
-                            <span className={`material-symbols-outlined text-xl ${activeTab === 'favorites' ? 'fill-1 text-primary' : ''}`}>favorite</span>
-                            {favorites.length > 0 && <span className="absolute -top-1 -right-1 bg-primary text-white text-[8px] w-3 h-3 flex items-center justify-center rounded-full">{favorites.length}</span>}
-                        </button>
-                        <button className="hover:opacity-80 transition-opacity relative" onClick={() => setActiveTab('cart')}>
-                            <span className={`material-symbols-outlined text-xl ${activeTab === 'cart' ? 'text-primary' : ''}`}>shopping_cart</span>
-                            {cart.length > 0 && <span className="absolute -top-1 -right-1 bg-primary text-white text-[8px] w-3 h-3 flex items-center justify-center rounded-full">{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
-                        </button>
-                        <button className="hover:opacity-80 transition-opacity" onClick={() => setActiveTab('profile')}>
-                            <span className={`material-symbols-outlined text-xl ${activeTab === 'profile' ? 'text-primary' : ''}`}>person</span>
-                        </button>
-                    </div>
-                </div>
-            </nav>
+                    <UserIcon size={20} onClick={() => setActiveTab('profile')} style={{ cursor: 'pointer', opacity: activeTab === 'profile' ? 1 : 0.4 }} />
+                </nav>
+            </header>
 
-            <main className="pt-24">
+            <main className="container" style={{ paddingBottom: '100px' }}>
                 <AnimatePresence mode="wait">
                     {!user && activeTab === 'profile' ? (
-                        <div className="container mx-auto px-8">
-                            <AuthPage mode={authMode} setMode={setAuthMode} onAuth={async (f) => {
-                                const r = await axios.post(`${API_BASE}${authMode === 'login' ? '/auth/login' : '/auth/register'}`, f);
-                                setUser(r.data); localStorage.setItem('user', JSON.stringify(r.data)); fetchOrders(r.data.id); fetchCards(r.data.id);
-                            }} />
-                        </div>
+                        <AuthPage mode={authMode} setMode={setAuthMode} onAuth={async (f) => {
+                            const r = await axios.post(`${API_BASE}${authMode === 'login' ? '/auth/login' : '/auth/register'}`, f);
+                            setUser(r.data); localStorage.setItem('user', JSON.stringify(r.data)); fetchOrders(r.data.id); fetchCards(r.data.id);
+                        }} />
                     ) : (
                         <motion.div key={activeTab} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}>
                             {activeTab === 'catalog' && (
@@ -159,36 +143,18 @@ function App() {
                                     setSelectedCat={setSelectedCat}
                                     sortOrder={sortOrder}
                                     setSortOrder={setSortOrder}
-                                    onAdd={p => {
-                                        setCart(c => c.find(i => i.id === p.id) ? c.map(i => i.id === p.id ? { ...i, quantity: i.quantity + 1 } : i) : [...c, { ...p, quantity: 1 }]);
-                                        setNotification({ msg: `🚲 ${p.name} добавлен в корзину!` });
-                                        setTimeout(() => setNotification(null), 3000);
-                                    }}
+                                    onAdd={p => setCart(c => c.find(i => i.id === p.id) ? c.map(i => i.id === p.id ? { ...i, quantity: i.quantity + 1 } : i) : [...c, { ...p, quantity: 1 }])}
                                     onFav={p => setFavorites(f => f.find(x => x.id === p.id) ? f.filter(x => x.id !== p.id) : [...f, p])}
                                     favs={favorites}
                                 />
                             )}
-                            <div className="max-w-[1920px] mx-auto px-8 md:px-20">
-                                {activeTab === 'cart' && <Cart items={cart} onUpdate={(id, d) => setCart(c => c.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity + d) } : i))} onRemove={id => setCart(c => c.filter(i => i.id !== id))} onCheckout={() => { if (!user) { setAuthMode('login'); setActiveTab('profile'); return; } if (userCards.length === 0) { alert("Добавьте карту в профиле!"); setActiveTab('profile'); return; } setShowCardSelector(true); }} />}
-                                {activeTab === 'profile' && <Profile user={user} orders={orders} cards={userCards} onUpdateCards={() => fetchCards(user.id)} onUpdateUser={u => { setUser(u); localStorage.setItem('user', JSON.stringify(u)); }} onLogout={() => { setUser(null); localStorage.removeItem('user'); setActiveTab('catalog'); }} formatStatus={formatStatus} formatCardNum={formatCardNum} formatPhoneBY={formatPhoneBY} />}
-                                {activeTab === 'favorites' && <Favorites items={favorites} onAdd={p => setCart(c => c.find(i => i.id === p.id) ? c.map(i => i.id === p.id ? { ...i, quantity: i.quantity + 1 } : i) : [...c, { ...p, quantity: 1 }])} onRemove={p => setFavorites(f => f.filter(x => x.id !== p.id))} />}
-                            </div>
+                            {activeTab === 'cart' && <Cart items={cart} onUpdate={(id, d) => setCart(c => c.map(i => i.id === id ? { ...i, quantity: Math.max(1, i.quantity + d) } : i))} onRemove={id => setCart(c => c.filter(i => i.id !== id))} onCheckout={() => { if (!user) { setAuthMode('login'); setActiveTab('profile'); return; } if (userCards.length === 0) { alert("Добавьте карту!"); setActiveTab('profile'); return; } setShowCardSelector(true); }} />}
+                            {activeTab === 'profile' && <Profile user={user} orders={orders} cards={userCards} onUpdateCards={() => fetchCards(user.id)} onUpdateUser={u => { setUser(u); localStorage.setItem('user', JSON.stringify(u)); }} onLogout={() => { setUser(null); localStorage.removeItem('user'); setActiveTab('catalog'); }} formatStatus={formatStatus} formatCardNum={formatCardNum} formatPhoneBY={formatPhoneBY} />}
+                            {activeTab === 'favorites' && <Favorites items={favorites} onAdd={p => setCart(c => c.find(i => i.id === p.id) ? c.map(i => i.id === p.id ? { ...i, quantity: i.quantity + 1 } : i) : [...c, { ...p, quantity: 1 }])} onRemove={p => setFavorites(f => f.filter(x => x.id !== p.id))} />}
                         </motion.div>
                     )}
                 </AnimatePresence>
             </main>
-
-            <footer className="w-full mt-20 bg-zinc-50">
-                <div className="flex flex-col md:flex-row justify-between items-center w-full px-12 py-12 gap-8 bg-zinc-100">
-                    <div className="text-lg font-black text-zinc-900 uppercase">KINETIC</div>
-                    <div className="flex gap-10 items-center flex-wrap justify-center">
-                        <a className="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Приватность</a>
-                        <a className="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Условия</a>
-                        <a className="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Доставка</a>
-                        <span className="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400">© 2024 KINETIC PRECISION.</span>
-                    </div>
-                </div>
-            </footer>
 
             <AnimatePresence>{showSecretAdmin && (
                 <div className="secret-admin-overlay">
@@ -224,13 +190,24 @@ function App() {
         .modal { background: #fff; width: 360px; padding: 32px; border-radius: 24px; border: 1px solid #f0f0f0; }
         .spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
         @keyframes spin { to {transform: rotate(360deg)} }
+        .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+        .bike-card { background: #fff; border-radius: 24px; border: 1px solid #f2f2f2; overflow: hidden; padding-bottom: 24px; position: relative; transition: 0.3s; }
+        .bike-card:hover { transform: translateY(-8px); border-color: #000; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .stock-badge { position: absolute; top: 15px; left: 15px; background: #000; color: #fff; font-size: 10px; padding: 5px 12px; border-radius: 20px; font-weight: 800; z-index: 10; }
+        .bike-info { padding: 0 24px; margin-top: 16px; }
+        .card-actions { display: flex; gap: 8px; margin-top: 12px; }
+        .fav-heart { background: #f8f8f8; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .fav-heart:hover { background: #eee; }
         .u-input, .u-select { outline: none; transition: 0.2s; border: 1px solid #eee; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-top: 5px; background: #fff; color: #000; }
         .u-input:focus, .u-select:focus { border-color: #000 !important; }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #111; color: #fff; padding: 15px 25px; border-radius: 16px; display: flex; gap: 12px; align-items: center; z-index: 3000; }
         .admin-row-v2 { display: grid; grid-template-columns: 80px 1fr 120px 80px 120px; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid #f5f5f5; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
-        .fill-1 { font-variation-settings: 'FILL' 1; }
+        .cat-chip { padding: 10px 24px; border-radius: 30px; border: 1px solid #eee; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; background: #fff; }
+        .cat-chip.active { background: #000; color: #fff; border-color: #000; }
+        .sort-btn { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; cursor: pointer; opacity: 0.4; transition: 0.2s; }
+        .sort-btn.active { opacity: 1; }
       `}</style>
         </div>
     );
@@ -328,106 +305,47 @@ const AdminPanel = ({ products, onUpdate }) => {
 };
 
 const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrder, onAdd, onFav, favs }) => (
-    <div className="catalog-wrapper">
-        <section className="relative min-h-[921px] flex items-center px-8 md:px-20 hero-gradient">
-            <div className="grid grid-cols-1 md:grid-cols-12 w-full max-w-[1920px] mx-auto items-center">
-                <div className="md:col-span-6 z-10">
-                    <span className="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-bold text-primary mb-4 block">ИНЖЕНЕРНОЕ СОВЕРШЕНСТВО</span>
-                    <h1 className="text-7xl md:text-[10rem] font-black tracking-tighter leading-[0.85] text-on-surface mb-8">КОЛЛЕКЦИЯ<br />2026</h1>
-                    <p className="max-w-md text-on-surface-variant font-medium text-lg leading-relaxed mb-10 opacity-70">Слияние аэродинамической точности и человеческого потенциала. Переосмысление возможностей на двух колесах.</p>
-                    <button
-                        className="primary-gradient text-white px-10 py-5 rounded-xl font-bold uppercase tracking-widest text-xs hover:shadow-[0_0_40px_rgba(0,230,118,0.3)] transition-all active:scale-95"
-                        onClick={() => document.getElementById('discovery').scrollIntoView({ behavior: 'smooth' })}
-                    >
-                        ИССЛЕДОВАТЬ СЕРИЮ
-                    </button>
+    <div style={{ padding: '40px 0' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px' }}>
+            <div>
+                <h1 style={{ fontSize: '56px', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1 }}>COLLECTION.<br />2026.</h1>
+                <p style={{ fontSize: '15px', color: '#888', marginTop: '15px' }}>Найдите велосипед под свой стиль жизни.</p>
+            </div>
+            <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+                <div className={`sort-btn ${sortOrder === 'low' ? 'active' : ''}`} onClick={() => setSortOrder(p => p === 'low' ? 'none' : 'low')}>
+                    <ArrowUpWideNarrow size={18} /> СНАЧАЛА ДЕШЕВЫЕ
                 </div>
-                <div className="md:col-span-6 mt-12 md:mt-0 relative">
-                    <img alt="Sleek modern bicycle" className="w-full h-auto object-contain transform hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ4I_CBFgJGZZJGvISpiAueA1aWz0zvxP7VC04jll3q_oHRf4mQxhWxipz5xzj1QRlwPh0yPuwJI3P-spt9BisI0DxPaPm_U-4NuMBVtWsAQkLa285STlrjao1DVbjX0WxvBFUtmXbpX1zunwcXe27trpC2jkNU81PUT72ZZXKLDF54sVpUiWUm-NwviER0DY6TlJwitvem3Zw5gogQvA47uv0O0SBk7QEypkVRRyqmtSa_pG79K_oD9xDlN5MAAApg9zosMHwQJC2" />
-                    <div className="absolute -bottom-10 -right-10 hidden lg:block">
-                        <div className="bg-surface-container-highest p-8 rounded-xl backdrop-blur-xl bg-opacity-30">
-                            <span className="block text-[10px] uppercase tracking-widest font-bold opacity-50 mb-2">ВЕС</span>
-                            <span className="text-4xl font-black">6.4 KG</span>
-                        </div>
-                    </div>
+                <div className={`sort-btn ${sortOrder === 'high' ? 'active' : ''}`} onClick={() => setSortOrder(p => p === 'high' ? 'none' : 'high')}>
+                    <ArrowDownWideNarrow size={18} /> СНАЧАЛА ДОРОГИЕ
                 </div>
             </div>
-        </section>
+        </div>
 
-        <section id="discovery" className="px-8 md:px-20 py-32 bg-white">
-            <div className="max-w-[1920px] mx-auto">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
-                    <div>
-                        <h2 className="text-4xl font-black tracking-tighter mb-4 uppercase">ТЕХНОЛОГИЧНОЕ СНАРЯЖЕНИЕ</h2>
-                        <div className="flex gap-3 flex-wrap">
-                            {CATEGORIES.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${selectedCat === cat.id ? 'bg-on-surface text-white' : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'}`}
-                                    onClick={() => setSelectedCat(cat.id)}
-                                >
-                                    {cat.label}
-                                </button>
-                            ))}
+        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', overflowX: 'auto', paddingBottom: '10px' }}>
+            {CATEGORIES.map(cat => (
+                <div key={cat.id} className={`cat-chip ${selectedCat === cat.id ? 'active' : ''}`} onClick={() => setSelectedCat(cat.id)}>
+                    {cat.label}
+                </div>
+            ))}
+        </div>
+
+        <div className="catalog-grid">
+            {products.length === 0 ? <p style={{ padding: '60px 0', fontSize: '18px', color: '#ccc' }}>В этой категории товаров пока нет</p> : products.map(p => (
+                <div key={p.id} className="bike-card">
+                    <div className="stock-badge">{p.stock > 0 ? `STOCK: ${p.stock}` : 'SOLD OUT'}</div>
+                    <img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
+                    <div className="bike-info">
+                        <span style={{ fontSize: '10px', color: '#999', fontWeight: 800, textTransform: 'uppercase' }}>{p.category || 'city'}</span>
+                        <h3 style={{ margin: '4px 0 10px 0' }}>{p.name}</h3>
+                        <p style={{ fontWeight: '900', fontSize: '19px' }}>{p.price.toLocaleString()} ₽</p>
+                        <div className="card-actions">
+                            <button className="btn" style={{ flex: 1, padding: '14px' }} onClick={() => onAdd(p)}>В КОРЗИНУ</button>
+                            <div className="fav-heart" onClick={() => onFav(p)}><Heart size={18} fill={favs.find(f => f.id === p.id) ? "#000" : "none"} color={favs.find(f => f.id === p.id) ? "#000" : "#ddd"} /></div>
                         </div>
                     </div>
-                    <div className="text-right">
-                        <div className="flex gap-4 mb-4 justify-end">
-                            <button className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortOrder === 'low' ? 'text-primary' : 'text-zinc-400'}`} onClick={() => setSortOrder(p => p === 'low' ? 'none' : 'low')}>
-                                <span className="material-symbols-outlined text-sm">arrow_upward</span> Дешевые
-                            </button>
-                            <button className={`flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest transition-all ${sortOrder === 'high' ? 'text-primary' : 'text-zinc-400'}`} onClick={() => setSortOrder(p => p === 'high' ? 'none' : 'high')}>
-                                <span className="material-symbols-outlined text-sm">arrow_downward</span> Дорогие
-                            </button>
-                        </div>
-                        <p className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant opacity-40">ПОКАЗАНО {products.length} МОДЕЛЕЙ</p>
-                    </div>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    {products.length === 0 ? (
-                        <p className="col-span-full py-20 text-center text-zinc-400 font-bold uppercase tracking-widest">В этой категории товаров пока нет</p>
-                    ) : products.map(p => (
-                        <div key={p.id} className="group cursor-pointer">
-                            <div className="bg-surface-container-low rounded-xl p-8 mb-8 relative overflow-hidden">
-                                <div className="absolute top-6 left-6 z-10">
-                                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${p.stock > 0 ? 'bg-primary-container text-on-primary-container' : 'bg-error-container text-on-error-container'}`}>
-                                        {p.stock > 0 ? `В НАЛИЧИИ: ${p.stock}` : 'НЕТ В НАЛИЧИИ'}
-                                    </span>
-                                </div>
-                                <button
-                                    className={`absolute top-6 right-6 z-10 transition-all ${favs.find(x => x.id === p.id) ? 'text-error opacity-100' : 'text-on-surface opacity-30 group-hover:opacity-100 hover:text-error'}`}
-                                    onClick={(e) => { e.stopPropagation(); onFav(p); }}
-                                >
-                                    <span className={`material-symbols-outlined ${favs.find(x => x.id === p.id) ? 'fill-1' : ''}`}>favorite</span>
-                                </button>
-                                <div className="aspect-[4/5] flex items-center justify-center">
-                                    <img
-                                        alt={p.name}
-                                        className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500"
-                                        src={getFullImgUrl(p.imageUrl)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex justify-between items-start mb-4">
-                                <div>
-                                    <h3 className="text-xl font-black tracking-tighter uppercase mb-1">{p.name}</h3>
-                                    <p className="text-xs text-on-surface-variant opacity-60 font-medium uppercase">{p.category || 'Road'} • {p.description?.substring(0, 30)}...</p>
-                                </div>
-                                <span className="text-xl font-bold text-primary">{p.price.toLocaleString()} ₽</span>
-                            </div>
-                            <button
-                                className="w-full bg-on-surface text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary transition-colors flex items-center justify-center gap-2 group-hover:shadow-lg"
-                                onClick={() => onAdd(p)}
-                            >
-                                В КОРЗИНУ
-                                <span className="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
+            ))}
+        </div>
     </div>
 );
 
