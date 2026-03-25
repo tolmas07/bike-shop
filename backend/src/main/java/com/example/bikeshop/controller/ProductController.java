@@ -2,20 +2,24 @@ package com.example.bikeshop.controller;
 
 import com.example.bikeshop.entity.Product;
 import com.example.bikeshop.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "${ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public ProductController(ProductRepository productRepository) {
+    public ProductController(ProductRepository productRepository, SimpMessagingTemplate messagingTemplate) {
         this.productRepository = productRepository;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @GetMapping
@@ -25,7 +29,9 @@ public class ProductController {
 
     @PostMapping
     public Product addProduct(@RequestBody Product product) {
-        return productRepository.save(product);
+        Product saved = productRepository.save(product);
+        notifyClients();
+        return saved;
     }
 
     @PutMapping("/{id}")
@@ -37,13 +43,20 @@ public class ProductController {
             product.setCategory(updatedProduct.getCategory());
             product.setImageUrl(updatedProduct.getImageUrl());
             product.setStock(updatedProduct.getStock());
-            return ResponseEntity.ok(productRepository.save(product));
+            Product saved = productRepository.save(product);
+            notifyClients();
+            return ResponseEntity.ok(saved);
         }).orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
+        notifyClients();
         return ResponseEntity.ok().build();
+    }
+
+    private void notifyClients() {
+        messagingTemplate.convertAndSend("/topic/products", "updated");
     }
 }

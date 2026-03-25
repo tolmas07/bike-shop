@@ -27,6 +27,11 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CatalogFragment extends Fragment {
 
@@ -39,6 +44,8 @@ public class CatalogFragment extends Fragment {
     private List<Product> allProducts = new ArrayList<>();
     private String currentCategory = "ALL";
     private boolean isAscending = true;
+    private StompClient stompClient;
+    private CompositeDisposable compositeDisposable;
 
     private TextView btnAll, btnCity, btnMountain, btnElectric;
 
@@ -96,7 +103,42 @@ public class CatalogFragment extends Fragment {
 
         // Загружаем данные с сервера при запуске.
         loadProducts();
+        
+        // WebSocket setup
+        connectWebSocket();
+        
         return view;
+    }
+
+    private void connectWebSocket() {
+        compositeDisposable = new CompositeDisposable();
+        // The URL needs to be ws:// or wss:// instead of http:// or https://
+        String wsUrl = "wss://bikeshop-backend.onrender.com/ws-raw/websocket";
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, wsUrl);
+        
+        Log.d(TAG, "Connecting to WebSocket: " + wsUrl);
+
+        compositeDisposable.add(stompClient.topic("/topic/products")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    Log.d(TAG, "WS Msg: " + topicMessage.getPayload());
+                    if (topicMessage.getPayload().contains("updated")) {
+                        loadProducts();
+                        Toast.makeText(getContext(), "🔔 Каталог обновлен!", Toast.LENGTH_SHORT).show();
+                    }
+                }, throwable -> {
+                    Log.e(TAG, "WS Error", throwable);
+                }));
+
+        stompClient.connect();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (stompClient != null) stompClient.disconnect();
+        if (compositeDisposable != null) compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     /**

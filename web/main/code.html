@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KINETIC | Engineered for Energy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#faf9f9",
+                        "background": "#faf9f9",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#cae6ff",
+                        "secondary-container": "#00affe",
+                        "inverse-on-surface": "#f2f0f0",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#006d35",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e3e2e2",
+                        "on-surface-variant": "#3b4a3d",
+                        "surface-variant": "#e3e2e2",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1b1c1c",
+                        "primary-container": "#00e676",
+                        "tertiary-fixed": "#e5e2e1",
+                        "on-secondary-fixed-variant": "#004b70",
+                        "tertiary-container": "#cac8c7",
+                        "on-secondary-container": "#003f5f",
+                        "surface-bright": "#faf9f9",
+                        "on-primary-container": "#00612e",
+                        "on-secondary-fixed": "#001e30",
+                        "primary-fixed": "#62ff96",
+                        "on-tertiary-fixed-variant": "#474646",
+                        "surface-container-high": "#e9e8e8",
+                        "surface-container-low": "#f5f3f3",
+                        "tertiary": "#5f5e5e",
+                        "secondary": "#006493",
+                        "primary": "#006d35",
+                        "inverse-primary": "#00e475",
+                        "on-primary-fixed-variant": "#005226",
+                        "on-background": "#1b1c1c",
+                        "outline-variant": "#bacbb9",
+                        "inverse-surface": "#303031",
+                        "primary-fixed-dim": "#00e475",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#efeded",
+                        "secondary-fixed-dim": "#8dcdff",
+                        "outline": "#6b7b6c",
+                        "on-primary-fixed": "#00210b",
+                        "surface-dim": "#dbdad9",
+                        "on-tertiary-container": "#545353",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "on-primary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #faf9f9 0%, #ffffff 100%);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #006d35 0%, #00e676 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav">
+<div class="flex justify-between items-center w-full px-8 py-6 max-w-[1920px] mx-auto">
+<div class="text-2xl font-black tracking-tighter text-zinc-900">KINETIC</div>
+<div class="hidden md:flex gap-8 items-center"><a class="font-['Inter'] tracking-tight font-medium uppercase text-xs text-[#006d35] border-b-2 border-[#00e676] pb-1" href="#">Каталог</a></div>
+<div class="flex gap-6 items-center"><button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-xl" data-icon="favorite">favorite</span>
+</button>
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-xl" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center px-8 md:px-20 hero-gradient">
+<div class="grid grid-cols-1 md:grid-cols-12 w-full max-w-[1920px] mx-auto items-center">
+<div class="md:col-span-6 z-10">
+<span class="font-['Inter'] text-[10px] tracking-[0.2em] uppercase font-bold text-primary mb-4 block">ИНЖЕНЕРНОЕ СОВЕРШЕНСТВО</span>
+<h1 class="text-7xl md:text-[10rem] font-black tracking-tighter leading-[0.85] text-on-surface mb-8">КОЛЛЕКЦИЯ<br/>2026</h1>
+<p class="max-w-md text-on-surface-variant font-medium text-lg leading-relaxed mb-10 opacity-70">Слияние аэродинамической точности и человеческого потенциала. Переосмысление возможностей на двух колесах.</p>
+<button class="primary-gradient text-white px-10 py-5 rounded-xl font-bold uppercase tracking-widest text-xs hover:shadow-[0_0_40px_rgba(0,230,118,0.3)] transition-all active:scale-95">ИССЛЕДОВАТЬ СЕРИЮ</button>
+</div>
+<div class="md:col-span-6 mt-12 md:mt-0 relative">
+<img alt="Sleek modern bicycle" class="w-full h-auto object-contain transform hover:scale-105 transition-transform duration-700" data-alt="Side profile of a high-end aerodynamic road bike in minimalist light gray finish against a clean studio white background with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZ4I_CBFgJGZZJGvISpiAueA1aWz0zvxP7VC04jll3q_oHRf4mQxhWxipz5xzj1QRlwPh0yPuwJI3P-spt9BisI0DxPaPm_U-4NuMBVtWsAQkLa285STlrjao1DVbjX0WxvBFUtmXbpX1zunwcXe27trpC2jkNU81PUT72ZZXKLDF54sVpUiWUm-NwviER0DY6TlJwitvem3Zw5gogQvA47uv0O0SBk7QEypkVRRyqmtSa_pG79K_oD9xDlN5MAAApg9zosMHwQJC2"/>
+<div class="absolute -bottom-10 -right-10 hidden lg:block">
+<div class="bg-surface-container-highest p-8 rounded-xl backdrop-blur-xl bg-opacity-30">
+<span class="block text-[10px] uppercase tracking-widest font-bold opacity-50 mb-2">ВЕС</span>
+<span class="text-4xl font-black">6.4 KG</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Discovery -->
+<section class="px-8 md:px-20 py-32 bg-white">
+<div class="max-w-[1920px] mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+<div>
+<h2 class="text-4xl font-black tracking-tighter mb-4">ТЕХНОЛОГИЧНОЕ СНАРЯЖЕНИЕ</h2>
+<div class="flex gap-3 flex-wrap">
+<button class="px-6 py-2 rounded-full bg-on-surface text-white text-[10px] font-bold uppercase tracking-widest">ВСЕ</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors">ГОРОДСКИЕ</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors">ГОРНЫЕ</button>
+<button class="px-6 py-2 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors">ЭЛЕКТРО</button>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant opacity-40">ПОКАЗАНО 3 ИЗ 42 МОДЕЛЕЙ</p>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Product 1 -->
+<div class="group">
+<div class="bg-surface-container-low rounded-xl p-8 mb-8 relative overflow-hidden">
+<div class="absolute top-6 left-6 z-10">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">В НАЛИЧИИ: 4</span>
+</div>
+<button class="absolute top-6 right-6 z-10 text-on-surface opacity-30 group-hover:opacity-100 group-hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<div class="aspect-[4/5] flex items-center justify-center">
+<img alt="Kinetic Apex" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500" data-alt="Minimalist white performance road bike with clean lines and carbon fiber details on a neutral gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCntqVeTc1FZq0mvsjk6CQrNT1aZZyXbyX1ATqoe-3KPKvzfc7rEBLffihcNj00umi0Jn40fYQyKmi5pqRZ7gScLOQ8_xgel5FLOgRWKbANuqB7poYRgYG3nKr9T8yuYbyAkKFemPEm2Lzt3SoME7P2o4wcN-xeIOz8lW4-Y1YbPjXoOi9t5nqiJVGfH7SqHIRr1KAcqFozh9A0spK8XVQuU-lVtqvS_rvYDzG_jgTvRgn5YQx8VAsLCDqCBK3_CaGwCKVVOuoR0n1g"/>
+</div>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-xl font-black tracking-tighter uppercase mb-1">APEX ULTRA</h3>
+<p class="text-xs text-on-surface-variant opacity-60 font-medium">Race Performance • Carbon</p>
+</div>
+<span class="text-xl font-bold text-primary">850,000 ₽</span>
+</div>
+<button class="w-full bg-on-surface text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary transition-colors flex items-center justify-center gap-2 group">В КОРЗИНУ <span class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span></button>
+</div>
+<!-- Product 2 -->
+<div class="group">
+<div class="bg-surface-container-low rounded-xl p-8 mb-8 relative overflow-hidden">
+<div class="absolute top-6 left-6 z-10">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">ЛИМИТИРОВАНО: 2</span>
+</div>
+<button class="absolute top-6 right-6 z-10 text-on-surface opacity-30 group-hover:opacity-100 group-hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<div class="aspect-[4/5] flex items-center justify-center">
+<img alt="Kinetic Volt" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500" data-alt="Matte black high-end electric commuter bike with integrated battery and futuristic frame design in studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxUnJvSc7_gjsiXmuy2z-LwBZv2L1bE0Ghs8dwpzumrIFRBo75GjwIBe-HFvVV8IyvP-Pob9K1b4y7iwHWp5v08tQczJ0S4qWZM8TduUHJlDYd8apJfDlzSGPxyhSu5V5ZbhMoD9z-XyRehVehaOOpVgD_plua19pnw5Q4RM2EEKFhq79nCOmCwMK-m5-eXY_tz5SpgcBF7JGouYVIOx6_-Do_iObnNO811NnDKsHvyArgg-2vKdtfAn3BIBlmVxUV3pYmD8t3DB4u"/>
+</div>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-xl font-black tracking-tighter uppercase mb-1">VOLT HYBRID</h3>
+<p class="text-xs text-on-surface-variant opacity-60 font-medium">Electric • Urban Mobility</p>
+</div>
+<span class="text-xl font-bold text-primary">1,200,000 ₽</span>
+</div>
+<button class="w-full bg-on-surface text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary transition-colors flex items-center justify-center gap-2 group">В КОРЗИНУ <span class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span></button>
+</div>
+<!-- Product 3 -->
+<div class="group">
+<div class="bg-surface-container-low rounded-xl p-8 mb-8 relative overflow-hidden">
+<div class="absolute top-6 left-6 z-10">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter">В НАЛИЧИИ: 8</span>
+</div>
+<button class="absolute top-6 right-6 z-10 text-on-surface opacity-30 group-hover:opacity-100 group-hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<div class="aspect-[4/5] flex items-center justify-center">
+<img alt="Kinetic Terra" class="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500" data-alt="Professional grade mountain bike with aggressive geometry and premium suspension components on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxQRfUxMp3MDSU0e4wnvxv0Q5UawVLg2jfvAlqREtcGNgP55BsP7EBDd79UYlW-mYTgFq0hSwsBos0DWIuVnK7XSvOrS9FtSZYqWNbHd9lJllKKNmXbOEMFc5JCzlm80-B0jac8G3rlWlvJ6LrS4YS1dG21cp1VYblZM8YpamsIYasA69327Bkk0qEfaffIwv2iN3zRj6A2SC7K8L3FjZ-lvWiVLNp1L4O-RDYJkjj1Nk181xcY-SBHOzvuiLTpFgzh2gOe2MKoLwf"/>
+</div>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-xl font-black tracking-tighter uppercase mb-1">TERRA X-1</h3>
+<p class="text-xs text-on-surface-variant opacity-60 font-medium">Off-road • Hardtail</p>
+</div>
+<span class="text-xl font-bold text-primary">620,000 ₽</span>
+</div>
+<button class="w-full bg-on-surface text-white py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-primary transition-colors flex items-center justify-center gap-2 group">В КОРЗИНУ <span class="material-symbols-outlined text-sm transform group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span></button>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Excellence Section (Bento Grid) -->
+</main>
+<!-- Footer -->
+<footer class="w-full mt-20 bg-zinc-50">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-12 py-12 gap-8 tonal-shift bg-zinc-100">
+<div class="text-lg font-black text-zinc-900 uppercase">KINETIC</div>
+<div class="flex gap-10 items-center">
+<a class="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Приватность</a>
+<a class="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Условия</a>
+<a class="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">Доставка</a>
+<a class="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400 hover:text-[#00e676] transition-colors" href="#">© 2024 KINETIC PRECISION. СОЗДАНО ДЛЯ ЭНЕРГИИ.</a>
+</div>
+<div class="font-['Inter'] text-[10px] tracking-[0.05em] uppercase font-bold text-zinc-400">© 2024 KINETIC PRECISION. СОЗДАНО ДЛЯ ЭНЕРГИИ.</div>
+</div>
+</footer>
+</body></html>

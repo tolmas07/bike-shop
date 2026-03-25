@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Heart, User as UserIcon, CheckCircle, Trash2, Plus, Minus, CreditCard, LogOut, Package, Clock, Truck, XCircle, CheckCircle2, ChevronRight, X, ShieldCheck, Settings, PlusCircle, Edit3, Save, AlertCircle, Bell, Filter, ArrowUpWideNarrow, ArrowDownWideNarrow, Bike, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import SockJS from 'sockjs-client/dist/sockjs';
+import Stomp from 'stompjs';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8081/api';
 
@@ -41,6 +43,27 @@ function App() {
         if (saved) {
             const u = JSON.parse(saved); setUser(u); fetchOrders(u.id); fetchCards(u.id);
         }
+
+        // WebSocket setup for real-time updates
+        const socket = new SockJS(API_BASE.replace('/api', '/ws'));
+        const stompClient = Stomp.over(socket);
+        stompClient.debug = null; // Disable debug logs in console
+
+        stompClient.connect({}, () => {
+            stompClient.subscribe('/topic/products', (msg) => {
+                if (msg.body === 'updated') {
+                    fetchProducts();
+                    setNotification({ msg: "🔔 Каталог обновлен!" });
+                    setTimeout(() => setNotification(null), 3000);
+                }
+            });
+        }, (err) => {
+            console.error('WebSocket Error:', err);
+        });
+
+        return () => {
+            if (stompClient.connected) stompClient.disconnect();
+        };
     }, []);
 
     useEffect(() => {
