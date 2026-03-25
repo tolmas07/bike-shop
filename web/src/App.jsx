@@ -292,9 +292,33 @@ function App() {
         .u-input, .u-select { outline: none; transition: 0.2s; border: 1px solid #eee; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-top: 5px; background: #fff; color: #000; }
         .u-input:focus, .u-select:focus { border-color: #000 !important; }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #111; color: #fff; padding: 15px 25px; border-radius: 16px; display: flex; gap: 12px; align-items: center; z-index: 3000; }
+        
+        .admin-form-box { background: #fafafa; padding: 32px; border-radius: 24px; margin-bottom: 40px; border: 1px solid #f0f0f0; }
+        .admin-form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; }
+        .admin-section-title { margin-bottom: 24px; letter-spacing: 1.2px; font-size: 11px; font-weight: 900; color: #888; text-transform: uppercase; }
+        .admin-submit-btn { margin-top: 20px; padding: 15px 40px; width: auto; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .admin-header-row { background: #f9f9f9; padding: 12px 20px; border-radius: 14px; display: grid; grid-template-columns: 80px 1fr 120px 80px 120px; gap: 20px; font-size: 10px; font-weight: 800; color: #bbb; margin-bottom: 15px; }
         .admin-row-v2 { display: grid; grid-template-columns: 80px 1fr 120px 80px 120px; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid #f5f5f5; }
+        .admin-edit-box { grid-column: 2 / span 4; display: grid; gap: 15px; }
+        .admin-edit-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 10px; }
+        .admin-edit-meta { display: flex; gap: 10px; margin-top: 10px; align-items: center; }
+        .admin-edit-actions { display: flex; gap: 8px; }
+
+        .profile-title-row { display: flex; justify-content: space-between; margin-bottom: 48px; align-items: center; }
+        .profile-grid { display: grid; grid-template-columns: 1fr 1.8fr; gap: 48px; }
+        .profile-sidebar { background: #fcfcfc; padding: 32px; border-radius: 28px; border: 1px solid #f5f5f5; }
+        .card-item-p { background: #111; color: #fff; padding: 18px; border-radius: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .orders-box { max-height: 600px; overflow-y: auto; padding-right: 12px; }
+        .order-hist-row { background: #fff; border: 1px solid #f0f0f0; padding: 24px; border-radius: 24px; margin-bottom: 16px; display: flex; }
+        
+        .cart-grid { display: grid; grid-template-columns: 1fr 340px; gap: 48px; margin-top: 48px; }
+        .cart-items-box { background: #fff; border-radius: 28px; padding: 10px; border: 1px solid #f5f5f5; }
+        .cart-row { display: flex; gap: 25px; padding: 24px; border-bottom: 1px solid #f9f9f9; align-items: center; }
+        .cart-summary { background: #111; color: #fff; padding: 40px; border-radius: 32px; height: fit-content; box-shadow: 0 40px 100px rgba(0,0,0,0.15); }
+
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+        .cat-chips { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
         .cat-chip { padding: 10px 24px; border-radius: 30px; border: 1px solid #eee; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s; background: #fff; }
         .cat-chip.active { background: #000; color: #fff; border-color: #000; }
         .sort-btn { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; cursor: pointer; opacity: 0.4; transition: 0.2s; }
@@ -302,7 +326,7 @@ function App() {
 
         .main-header { padding: 24px 0; border-bottom: 1px solid #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
         .desktop-nav { display: flex; gap: 35px; align-items: center; }
-        .desktop-nav a { font-size: 13px; font-weight: 700; color: #ccc; }
+        .desktop-nav a { font-size: 13px; font-weight: 700; color: #ccc; transition: 0.2s; }
         .desktop-nav a.active { color: #000; }
         .mobile-bottom-nav { display: none; }
 
@@ -310,6 +334,12 @@ function App() {
             html, body { overflow-x: hidden !important; width: 100vw; position: relative; }
             .app { overflow-x: hidden !important; width: 100vw; }
             .container { padding: 0 16px !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
+            .admin-header-row { display: none !important; }
+            .admin-form-grid { grid-template-columns: 1fr !important; gap: 10px; }
+            .admin-row-v2 { grid-template-columns: 1fr !important; gap: 15px; padding: 20px; background: #f9f9f9; border-radius: 20px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
+            .admin-row-v2 img { width: 100% !important; height: 180px !important; object-fit: cover; }
+            .secret-admin-modal { width: 100vw; height: 100vh; border-radius: 0; padding: 16px; }
+
             .desktop-nav { display: none; }
             .logo { width: 100%; text-align: center; font-size: 18px !important; }
             .mobile-bottom-nav { 
@@ -337,10 +367,16 @@ function App() {
             .payment-select-item { padding: 18px; }
             .viz-num-text { font-size: 14px; }
             
-            .admin-row-v2 { grid-template-columns: 1fr !important; gap: 15px; padding: 20px; background: #f9f9f9; border-radius: 20px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
-            .admin-row-v2 img { width: 100% !important; height: 180px !important; object-fit: cover; }
-            .secret-admin-modal { width: 100vw; height: 100vh; border-radius: 0; padding: 16px; }
-            .admin-header-row { display: none !important; }
+            .profile-grid { grid-template-columns: 1fr !important; gap: 32px; width: 100%; }
+            .profile-sidebar { padding: 24px 16px; border-radius: 20px; }
+            .profile-title-row { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .order-hist-row { padding: 20px 16px; }
+            
+            .cart-grid { grid-template-columns: 1fr !important; gap: 24px; }
+            .cart-summary { padding: 30px 20px; border-radius: 24px; }
+            .cart-row { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
+            
+            .admin-container, .profile-container, .cart-container { padding-bottom: 100px; }
         }
       `}</style>
         </div>
@@ -507,24 +543,33 @@ const Profile = ({ user, orders, cards, onUpdateCards, onUpdateUser, onLogout, f
     const [c, setC] = useState({ cardNumber: '', expiryDate: '', cvv: '' });
     const save = async () => { try { const r = await axios.put(`${API_BASE}/auth/profile/${user.id}`, u); onUpdateUser(r.data); alert("Данные обновлены!"); } catch (e) { alert("Ошибка!"); } };
     return (
-        <div style={{ padding: '40px 0' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '48px', alignItems: 'center' }}><div><h1 style={{ fontSize: '32px', fontWeight: '900' }}>Профиль.</h1></div><button className="btn btn-secondary" style={{ height: '40px', padding: '0 25px' }} onClick={onLogout}><LogOut size={14} /> Выйти</button></div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 380px) 1fr', gap: '48px' }}>
-                <div style={{ background: '#fcfcfc', padding: '32px', borderRadius: '28px', border: '1px solid #f5f5f5' }}>
-                    <h4 style={{ marginBottom: '20px', fontSize: '12px', fontWeight: 800, color: '#bbb' }}>ДАННЫЕ ДОСТАВКИ</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+        <div className="profile-container" style={{ padding: '40px 0' }}>
+            <div className="profile-title-row">
+                <div><h1 style={{ fontSize: '32px', fontWeight: '900' }}>Профиль.</h1></div>
+                <button className="btn btn-secondary" style={{ height: '40px', padding: '0 25px' }} onClick={onLogout}><LogOut size={14} /> Выйти</button>
+            </div>
+            <div className="profile-grid">
+                <div className="profile-sidebar">
+                    <h4 className="profile-section-title">ДАННЫЕ ДОСТАВКИ</h4>
+                    <div className="admin-form-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
                         <input className="u-input" value={u.city || ''} placeholder="Город" onChange={e => setU({ ...u, city: e.target.value })} />
                         <input className="u-input" value={u.street || ''} placeholder="Улица" onChange={e => setU({ ...u, street: e.target.value })} />
                         <input className="u-input" value={u.house || ''} placeholder="Дом" onChange={e => setU({ ...u, house: e.target.value })} />
                         <input className="u-input" value={u.apartment || ''} placeholder="Кв" onChange={e => setU({ ...u, apartment: e.target.value })} />
                     </div>
-                    <div style={{ marginTop: '16px' }}><span style={{ fontSize: '10px', fontWeight: 800, color: '#999' }}>ТЕЛЕФОН</span><input className="u-input" value={u.phone || ''} onChange={e => setU({ ...u, phone: formatPhoneBY(e.target.value) })} placeholder="+375" /></div>
+                    <div className="phone-input-box">
+                        <span style={{ fontSize: '10px', fontWeight: 800, color: '#999' }}>ТЕЛЕФОН</span>
+                        <input className="u-input" value={u.phone || ''} onChange={e => setU({ ...u, phone: formatPhoneBY(e.target.value) })} placeholder="+375" />
+                    </div>
                     <button className="btn" style={{ width: '100%', marginTop: '20px', padding: '15px' }} onClick={save}>СОХРАНИТЬ АДРЕС</button>
-                    <h4 style={{ marginTop: '48px', marginBottom: '16px', fontSize: '12px', fontWeight: 800, color: '#bbb' }}>КАРТЫ</h4>
-                    {cards.map(card => (<div key={card.id} style={{ background: '#111', color: '#fff', padding: '18px', borderRadius: '16px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '13px', letterSpacing: '1.5px' }}>•••• {card.cardNumber.slice(-4)}</span>
-                        <Trash2 size={14} color="#e74c3c" style={{ cursor: 'pointer', opacity: 0.6 }} onClick={async () => { await axios.delete(`${API_BASE}/cards/${card.id}`); onUpdateCards(); }} />
-                    </div>))}
+
+                    <h4 className="profile-section-title" style={{ marginTop: '48px' }}>КАРТЫ</h4>
+                    {cards.map(card => (
+                        <div key={card.id} className="card-item-p">
+                            <span style={{ fontSize: '13px', letterSpacing: '1.5px' }}>•••• {card.cardNumber.slice(-4)}</span>
+                            <Trash2 size={14} color="#e74c3c" style={{ cursor: 'pointer', opacity: 0.6 }} onClick={async () => { await axios.delete(`${API_BASE}/cards/${card.id}`); onUpdateCards(); }} />
+                        </div>
+                    ))}
                     <div style={{ border: '1px dashed #ddd', padding: '15px', borderRadius: '18px', marginTop: '15px' }}>
                         <input className="u-input" style={{ padding: '10px' }} value={c.cardNumber} onChange={e => setC({ ...c, cardNumber: formatCardNum(e.target.value) })} placeholder="Номер карты" />
                         <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
@@ -535,20 +580,29 @@ const Profile = ({ user, orders, cards, onUpdateCards, onUpdateUser, onLogout, f
                     </div>
                 </div>
                 <div>
-                    <h4 style={{ marginBottom: '24px', fontSize: '12px', fontWeight: 800, color: '#bbb' }}>ИСТОРИЯ ЗАКАЗОВ</h4>
-                    <div className="order-hist" style={{ maxHeight: '550px', overflowY: 'auto', paddingRight: '10px' }}>
+                    <h4 className="profile-section-title">ИСТОРИЯ ЗАКАЗОВ</h4>
+                    <div className="orders-box">
                         {orders.map(o => (
                             <div key={o.id} className="order-hist-row">
                                 <div style={{ flex: 1 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}><span style={{ fontWeight: 900 }}>Заказ #{o.id}</span><div style={{ fontSize: '10px', color: formatStatus(o.status).color, background: formatStatus(o.status).color + '15', padding: '4px 12px', borderRadius: '20px', fontWeight: 900 }}>{formatStatus(o.status).text}</div></div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                                        <span style={{ fontWeight: 900 }}>Заказ #{o.id}</span>
+                                        <div style={{ fontSize: '10px', color: formatStatus(o.status).color, background: formatStatus(o.status).color + '15', padding: '4px 12px', borderRadius: '20px', fontWeight: 900 }}>{formatStatus(o.status).text}</div>
+                                    </div>
                                     <div style={{ display: 'grid', gap: '5px', borderTop: '1px solid #f9f9f9', paddingTop: '10px' }}>
                                         {o.items && o.items.map(item => (
-                                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666' }}><span>{item.product?.name} x{item.quantity}</span><span style={{ fontWeight: 700 }}>{item.price.toLocaleString()} ₽</span></div>
+                                            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: '#666' }}>
+                                                <span>{item.product?.name} x{item.quantity}</span>
+                                                <span style={{ fontWeight: 700 }}>{item.price.toLocaleString()} ₽</span>
+                                            </div>
                                         ))}
                                     </div>
                                     <div style={{ marginTop: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                                         <span style={{ fontSize: '11px', color: '#ccc' }}>{new Date(o.createdAt).toLocaleDateString()}</span>
-                                        <div style={{ textAlign: 'right' }}><span style={{ fontSize: '11px', display: 'block', color: '#999' }}>ИТОГО:</span><span style={{ fontWeight: 900, fontSize: '20px' }}>{o.totalAmount.toLocaleString()} ₽</span></div>
+                                        <div style={{ textAlign: 'right' }}>
+                                            <span style={{ fontSize: '11px', display: 'block', color: '#999' }}>ИТОГО:</span>
+                                            <span style={{ fontWeight: 900, fontSize: '20px' }}>{o.totalAmount.toLocaleString()} ₽</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -560,17 +614,58 @@ const Profile = ({ user, orders, cards, onUpdateCards, onUpdateUser, onLogout, f
     );
 };
 
-const Cart = ({ items, onUpdate, onRemove, onCheckout }) => (
-    <div style={{ padding: '40px 0' }}><h1>Корзина.</h1>{items.length === 0 ? <p style={{ marginTop: '40px', fontSize: '18px', color: '#ccc' }}>Ваша корзина пуста</p> : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '48px', marginTop: '48px' }}>
-            <div style={{ background: '#fff', borderRadius: '28px', padding: '10px' }}>{items.map(i => (<div key={i.id} style={{ display: 'flex', gap: '25px', padding: '20px', borderBottom: '1px solid #f5f5f5', alignItems: 'center' }}><div style={{ flex: 1 }}><h3>{i.name}</h3><p style={{ fontWeight: 800 }}>{i.price.toLocaleString()} ₽</p></div><div style={{ display: 'flex', gap: '15px', alignItems: 'center', background: '#f9f9f9', padding: '8px 15px', borderRadius: '14px' }}><Minus size={14} onClick={() => onUpdate(i.id, -1)} style={{ cursor: 'pointer', opacity: 0.5 }} /> <span style={{ fontWeight: 900, width: '20px', textAlign: 'center' }}>{i.quantity}</span> <Plus size={14} onClick={() => onUpdate(i.id, 1)} style={{ cursor: 'pointer', opacity: 0.5 }} /></div><Trash2 size={18} color="#e74c3c" onClick={() => onRemove(i.id)} style={{ cursor: 'pointer', opacity: 0.3 }} /></div>))}</div>
-            <div style={{ background: '#111', color: '#fff', padding: '40px', borderRadius: '32px', height: 'fit-content' }}><span style={{ fontSize: '12px', fontWeight: 800, opacity: 0.5 }}>ИТОГО К ОПЛАТЕ</span><h2 style={{ fontSize: '32px', margin: '10px 0 40px 0', fontWeight: 900 }}>{items.reduce((a, b) => a + b.price * b.quantity, 0).toLocaleString()} ₽</h2><button className="btn" style={{ width: '100%', background: '#fff', color: '#000', fontWeight: '900', padding: '18px', borderRadius: '18px' }} onClick={onCheckout}>ОФОРМИТЬ ЗАКАЗ</button></div>
+const Cart = ({ items, onUpdate, onRemove, onCheckout }) => {
+    return (
+        <div className="cart-container" style={{ padding: '40px 0' }}>
+            <h1>Корзина.</h1>
+            {items.length === 0 ? <p style={{ marginTop: '40px', fontSize: '18px', color: '#ccc' }}>Ваша корзина пуста</p> : (
+                <div className="cart-grid">
+                    <div className="cart-items-box">
+                        {items.map(i => (
+                            <div key={i.id} className="cart-row">
+                                <div style={{ flex: 1 }}>
+                                    <h3>{i.name}</h3>
+                                    <p style={{ fontWeight: 800 }}>{i.price.toLocaleString()} ₽</p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '15px', alignItems: 'center', background: '#f9f9f9', padding: '8px 15px', borderRadius: '14px' }}>
+                                    <Minus size={14} onClick={() => onUpdate(i.id, -1)} style={{ cursor: 'pointer', opacity: 0.5 }} />
+                                    <span style={{ fontWeight: 900, width: '20px', textAlign: 'center' }}>{i.quantity}</span>
+                                    <Plus size={14} onClick={() => onUpdate(i.id, 1)} style={{ cursor: 'pointer', opacity: 0.5 }} />
+                                </div>
+                                <Trash2 size={18} color="#e74c3c" onClick={() => onRemove(i.id)} style={{ cursor: 'pointer', opacity: 0.3 }} />
+                            </div>
+                        ))}
+                    </div>
+                    <div className="cart-summary">
+                        <span style={{ fontSize: '12px', fontWeight: 800, opacity: 0.5 }}>ИТОГО К ОПЛАТЕ</span>
+                        <h2 style={{ fontSize: '32px', margin: '10px 0 40px 0', fontWeight: 900 }}>{items.reduce((a, b) => a + b.price * b.quantity, 0).toLocaleString()} ₽</h2>
+                        <button className="btn" style={{ width: '100%', background: '#fff', color: '#000', fontWeight: '900', padding: '18px', borderRadius: '18px' }} onClick={onCheckout}>ОФОРМИТЬ ЗАКАЗ</button>
+                    </div>
+                </div>
+            )}
         </div>
-    )}</div>
-);
+    );
+};
 
 const Favorites = ({ items, onAdd, onRemove }) => (
-    <div style={{ padding: '40px 0' }}><h1>Избранное ({items.length})</h1><div className="catalog-grid" style={{ marginTop: '48px' }}>{items.map(p => (<div key={p.id} className="bike-card"><img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '220px', objectFit: 'cover' }} /><div className="bike-info"><h3>{p.name}</h3><p style={{ fontWeight: 800 }}>{p.price.toLocaleString()} ₽</p><div className="card-actions"><button className="btn" style={{ width: '100%', marginTop: '10px', height: '45px', fontWeight: 900, borderRadius: '14px' }} onClick={() => onAdd(p)}>В КОРЗИНУ</button><div className="fav-heart" style={{ borderRadius: '14px' }} onClick={() => onRemove(p)}><X size={18} color="#e74c3c" /></div></div></div></div>))}</div></div>
+    <div className="favorites-container" style={{ padding: '40px 0' }}>
+        <h1>Избранное ({items.length})</h1>
+        <div className="catalog-grid" style={{ marginTop: '48px' }}>
+            {items.map(p => (
+                <div key={p.id} className="bike-card">
+                    <img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '220px', objectFit: 'cover' }} />
+                    <div className="bike-info">
+                        <h3>{p.name}</h3>
+                        <p style={{ fontWeight: 800 }}>{p.price.toLocaleString()} ₽</p>
+                        <div className="card-actions">
+                            <button className="btn" style={{ width: '100%', marginTop: '10px', height: '45px', fontWeight: 900, borderRadius: '14px' }} onClick={() => onAdd(p)}>В КОРЗИНУ</button>
+                            <div className="fav-heart" style={{ borderRadius: '14px' }} onClick={() => onRemove(p)}><X size={18} color="#e74c3c" /></div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
 );
 
 export default App;
