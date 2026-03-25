@@ -87,7 +87,7 @@ public class OrderController {
         }
 
         cartRepository.deleteByUserId(userId);
-
+        System.out.println("LOG: Order created and WebSocket notification triggered for user: " + userId);
         return ResponseEntity.ok(savedOrder);
     }
 

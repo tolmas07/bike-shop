@@ -101,10 +101,20 @@ public class ProfileFragment extends Fragment {
     }
 
     private void connectWebSocket() {
-        if (currentUserId == -1L || stompClient != null) return;
+        if (getContext() == null || currentUserId == -1L) {
+            updateUserId();
+            if (currentUserId == -1L) {
+                Log.d(TAG, "Cannot connect WS: currentUserId is still -1");
+                return;
+            }
+        }
+        if (stompClient != null && stompClient.isConnected()) return;
         
+        Log.d(TAG, "Connecting to Orders WS for user: " + currentUserId);
         compositeDisposable = new CompositeDisposable();
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "wss://bikeshop-backend.onrender.com/ws-raw/websocket");
+        
+        stompClient.withClientHeartbeat(10000).withServerHeartbeat(10000);
         
         compositeDisposable.add(stompClient.topic("/topic/orders/" + currentUserId)
                 .subscribeOn(Schedulers.io())
@@ -132,6 +142,7 @@ public class ProfileFragment extends Fragment {
             loadUserData();
             loadUserCards();
             loadOrderHistory();
+            connectWebSocket();
         }
     }
 
