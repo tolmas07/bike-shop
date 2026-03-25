@@ -324,6 +324,10 @@ function App() {
         .sort-btn { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; cursor: pointer; opacity: 0.4; transition: 0.2s; }
         .sort-btn.active { opacity: 1; }
 
+        .catalog-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+        .hero-title { font-size: 64px; font-weight: 900; letter-spacing: -3px; margin: 0; }
+        .sort-box { display: flex; gap: 24px; align-items: center; }
+
         .main-header { padding: 24px 0; border-bottom: 1px solid #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
         .desktop-nav { display: flex; gap: 35px; align-items: center; }
         .desktop-nav a { font-size: 13px; font-weight: 700; color: #ccc; transition: 0.2s; }
