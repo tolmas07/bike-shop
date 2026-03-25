@@ -145,18 +145,40 @@ function App() {
 
     return (
         <div className="app">
-            <header className="container" style={{ padding: '24px 0', borderBottom: '1px solid #f9f9f9' }}>
-                <div className="logo" style={{ fontSize: '20px', fontWeight: '900', letterSpacing: '-1px', cursor: 'pointer' }} onClick={() => { setActiveTab('catalog'); setSelectedCat('all'); }}>BIKE SHOP</div>
-                <nav style={{ gap: '35px', alignItems: 'center' }}>
-                    <a href="#" className={activeTab === 'catalog' ? 'active' : ''} style={{ fontSize: '13px', fontWeight: 700 }} onClick={() => setActiveTab('catalog')}>КАТАЛОГ</a>
-                    <a href="#" className={activeTab === 'favorites' ? 'active' : ''} style={{ fontSize: '13px', fontWeight: 700 }} onClick={() => setActiveTab('favorites')}>ИЗБРАННОЕ</a>
+            <header className="container main-header">
+                <div className="logo" onClick={() => { setActiveTab('catalog'); setSelectedCat('all'); }}>BIKE SHOP</div>
+                <nav className="desktop-nav">
+                    <a href="#" className={activeTab === 'catalog' ? 'active' : ''} onClick={() => setActiveTab('catalog')}>КАТАЛОГ</a>
+                    <a href="#" className={activeTab === 'favorites' ? 'active' : ''} onClick={() => setActiveTab('favorites')}>ИЗБРАННОЕ</a>
                     <div className="cart-icon" onClick={() => setActiveTab('cart')}>
                         <ShoppingCart size={20} color={activeTab === 'cart' ? 'black' : '#ccc'} />
-                        {cart.length > 0 && <span className="badge" style={{ width: '16px', height: '16px', fontSize: '9px', background: '#000', top: '-8px', right: '-8px' }}>{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
+                        {cart.length > 0 && <span className="badge">{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
                     </div>
                     <UserIcon size={20} onClick={() => setActiveTab('profile')} style={{ cursor: 'pointer', opacity: activeTab === 'profile' ? 1 : 0.4 }} />
                 </nav>
             </header>
+
+            <div className="mobile-bottom-nav">
+                <div className={`m-nav-item ${activeTab === 'catalog' ? 'active' : ''}`} onClick={() => setActiveTab('catalog')}>
+                    <Bike size={24} />
+                    <span>Каталог</span>
+                </div>
+                <div className={`m-nav-item ${activeTab === 'favorites' ? 'active' : ''}`} onClick={() => setActiveTab('favorites')}>
+                    <Heart size={24} />
+                    <span>Избранное</span>
+                </div>
+                <div className={`m-nav-item ${activeTab === 'cart' ? 'active' : ''}`} onClick={() => setActiveTab('cart')}>
+                    <div style={{ position: 'relative' }}>
+                        <ShoppingCart size={24} />
+                        {cart.length > 0 && <span className="m-badge">{cart.reduce((a, b) => a + b.quantity, 0)}</span>}
+                    </div>
+                    <span>Корзина</span>
+                </div>
+                <div className={`m-nav-item ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
+                    <UserIcon size={24} />
+                    <span>Профиль</span>
+                </div>
+            </div>
 
             <main className="container" style={{ paddingBottom: '100px' }}>
                 <AnimatePresence mode="wait">
@@ -277,6 +299,47 @@ function App() {
         .cat-chip.active { background: #000; color: #fff; border-color: #000; }
         .sort-btn { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 800; cursor: pointer; opacity: 0.4; transition: 0.2s; }
         .sort-btn.active { opacity: 1; }
+
+        .main-header { padding: 24px 0; border-bottom: 1px solid #f9f9f9; display: flex; justify-content: space-between; align-items: center; }
+        .desktop-nav { display: flex; gap: 35px; align-items: center; }
+        .desktop-nav a { font-size: 13px; font-weight: 700; color: #ccc; }
+        .desktop-nav a.active { color: #000; }
+        .mobile-bottom-nav { display: none; }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .desktop-nav { display: none; }
+            .logo { width: 100%; text-align: center; font-size: 18px !important; }
+            .mobile-bottom-nav { 
+                display: flex; position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; 
+                background: #fff; border-top: 1px solid #f0f0f0; z-index: 1000; 
+                justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom);
+            }
+            .m-nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #ccc; transition: 0.3s; }
+            .m-nav-item.active { color: #000; transform: translateY(-3px); }
+            .m-nav-item span { font-size: 10px; font-weight: 800; text-transform: uppercase; }
+            .m-badge { position: absolute; top: -5px; right: -10px; background: #000; color: #fff; font-size: 8px; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 900; }
+            
+            .catalog-container { padding: 24px 0 !important; }
+            .catalog-header { flex-direction: column; align-items: flex-start !important; gap: 32px; margin-bottom: 32px !important; }
+            .hero-title { font-size: 40px !important; }
+            .sort-box { flex-direction: column; align-items: flex-start !important; gap: 15px !important; }
+            
+            .catalog-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+            .cat-chips { overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin: 0 -20px 24px -20px; padding-left: 20px; border-bottom: none; display: flex; gap: 10px; }
+            .cat-chips::-webkit-scrollbar { display: none; }
+            .cat-chip { padding: 8px 18px; font-size: 10px; }
+            
+            .payment-modal { width: 100%; height: auto; min-height: 50vh; position: fixed; bottom: 0; left: 0; border-radius: 40px 40px 0 0; padding: 32px 20px; box-shadow: 0 -20px 50px rgba(0,0,0,0.1); }
+            .payment-header h3 { font-size: 22px; }
+            .payment-select-item { padding: 20px; }
+            .viz-num-text { font-size: 14px; }
+            
+            .admin-row-v2 { grid-template-columns: 1fr !important; gap: 15px; padding: 24px; background: #f9f9f9; border-radius: 20px; margin-bottom: 12px; }
+            .admin-row-v2 img { width: 100% !important; height: 180px !important; object-fit: cover; }
+            .secret-admin-modal { width: 100vw; height: 100vh; border-radius: 0; padding: 24px; }
+            .admin-header-row { display: none !important; }
+        }
       `}</style>
         </div>
     );
@@ -324,7 +387,7 @@ const AdminPanel = ({ products, onUpdate }) => {
                 <button className="btn" style={{ marginTop: '20px', padding: '15px 40px' }} onClick={add}>ОПУБЛИКОВАТЬ В КАТАЛОГ</button>
             </div>
 
-            <div style={{ background: '#f9f9f9', padding: '12px 20px', borderRadius: '14px', display: 'grid', gridTemplateColumns: '80px 1fr 120px 80px 120px', gap: '20px', fontSize: '10px', fontWeight: 800, color: '#bbb', marginBottom: '15px' }}>
+            <div className="admin-header-row" style={{ background: '#f9f9f9', padding: '12px 20px', borderRadius: '14px', display: 'grid', gridTemplateColumns: '80px 1fr 120px 80px 120px', gap: '20px', fontSize: '10px', fontWeight: 800, color: '#bbb', marginBottom: '15px' }}>
                 <span>ПРЕВЬЮ</span><span>ИНФОРМАЦИЯ</span><span>ЦЕНА</span><span>ЗАПАС</span><span>ДЕЙСТВИЯ</span>
             </div>
 
@@ -374,13 +437,13 @@ const AdminPanel = ({ products, onUpdate }) => {
 };
 
 const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrder, onAdd, onFav, favs }) => (
-    <div style={{ padding: '40px 0' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '48px' }}>
-            <div>
-                <h1 style={{ fontSize: '56px', fontWeight: '900', letterSpacing: '-3px', lineHeight: 1 }}>COLLECTION.<br />2026.</h1>
-                <p style={{ fontSize: '15px', color: '#888', marginTop: '15px' }}>Найдите велосипед под свой стиль жизни.</p>
+    <div className="catalog-container">
+        <div className="catalog-header">
+            <div className="cat-title-box">
+                <h1 className="hero-title">COLLECTION.<br />2026.</h1>
+                <p className="hero-sub">Найдите велосипед под свой стиль жизни.</p>
             </div>
-            <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+            <div className="sort-box">
                 <div className={`sort-btn ${sortOrder === 'low' ? 'active' : ''}`} onClick={() => setSortOrder(p => p === 'low' ? 'none' : 'low')}>
                     <ArrowUpWideNarrow size={18} /> СНАЧАЛА ДЕШЕВЫЕ
                 </div>
@@ -390,7 +453,7 @@ const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrde
             </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '40px', overflowX: 'auto', paddingBottom: '10px' }}>
+        <div className="cat-chips">
             {CATEGORIES.map(cat => (
                 <div key={cat.id} className={`cat-chip ${selectedCat === cat.id ? 'active' : ''}`} onClick={() => setSelectedCat(cat.id)}>
                     {cat.label}
