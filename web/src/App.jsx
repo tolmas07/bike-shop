@@ -202,7 +202,33 @@ function App() {
             )}</AnimatePresence>
 
             <AnimatePresence>{showCardSelector && (
-                <div className="checkout-overlay"><motion.div className="modal" initial={{ scale: 0.95 }} animate={{ scale: 1 }}><div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}><h3>Оплата заказа</h3><X size={18} style={{ cursor: 'pointer' }} onClick={() => setShowCardSelector(false)} /></div>{userCards.map(card => (<div key={card.id} className="selectable-card" style={{ padding: '16px', borderRadius: '14px' }} onClick={() => handlePay(card.id)}><div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}><div className="mini-chip" style={{ width: '24px', height: '18px' }}></div><p>•••• {card.cardNumber.slice(-4)}</p></div><ChevronRight size={14} opacity={0.3} /></div>))}</motion.div></div>
+                <div className="checkout-overlay">
+                    <motion.div className="payment-modal" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
+                        <div className="payment-header">
+                            <div>
+                                <h3>Оплата заказа</h3>
+                                <p>Выберите карту для списания</p>
+                            </div>
+                            <X size={20} style={{ cursor: 'pointer', opacity: 0.4 }} onClick={() => setShowCardSelector(false)} />
+                        </div>
+
+                        <div className="cards-list">
+                            {userCards.map(card => (
+                                <div key={card.id} className="payment-card-item" onClick={() => handlePay(card.id)}>
+                                    <div className="card-viz">
+                                        <div className="viz-chip"></div>
+                                        <div className="viz-num">•••• {card.cardNumber.slice(-4)}</div>
+                                    </div>
+                                    <div className="card-meta">
+                                        <span className="card-vendor">Debit Card</span>
+                                        <ChevronRight size={16} />
+                                    </div>
+                                </div>
+                            ))}
+                            {userCards.length === 0 && <p style={{ textAlign: 'center', padding: '20px', color: '#888' }}>У вас нет привязанных карт</p>}
+                        </div>
+                    </motion.div>
+                </div>
             )}</AnimatePresence>
 
             <AnimatePresence>{checkoutStatus !== 'idle' && (
@@ -229,6 +255,18 @@ function App() {
         .card-actions { display: flex; gap: 8px; margin-top: 12px; }
         .fav-heart { background: #f8f8f8; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .fav-heart:hover { background: #eee; }
+        .payment-modal { background: #fff; width: 420px; padding: 40px; border-radius: 32px; box-shadow: 0 50px 100px rgba(0,0,0,0.1); }
+        .payment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+        .payment-header h3 { font-size: 24px; font-weight: 900; margin: 0; }
+        .payment-header p { font-size: 13px; color: #888; margin: 4px 0 0 0; }
+        .cards-list { display: grid; gap: 12px; }
+        .payment-card-item { background: #111; color: #fff; padding: 24px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0, 0, 1); }
+        .payment-card-item:hover { transform: scale(1.02); background: #000; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .card-viz { display: flex; flex-direction: column; gap: 8px; }
+        .viz-chip { width: 35px; height: 25px; background: linear-gradient(135deg, #f1c40f, #f39c12); border-radius: 6px; opacity: 0.8; }
+        .viz-num { font-size: 16px; font-weight: 900; letter-spacing: 2px; }
+        .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; opacity: 0.4; }
+        .card-vendor { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .u-input, .u-select { outline: none; transition: 0.2s; border: 1px solid #eee; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-top: 5px; background: #fff; color: #000; }
         .u-input:focus, .u-select:focus { border-color: #000 !important; }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #111; color: #fff; padding: 15px 25px; border-radius: 16px; display: flex; gap: 12px; align-items: center; z-index: 3000; }
