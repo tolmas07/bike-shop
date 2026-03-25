@@ -3,6 +3,7 @@ package com.example.bikeshop.bot;
 import com.example.bikeshop.entity.Order;
 import com.example.bikeshop.service.OrderService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,9 +30,11 @@ public class OrderBot extends TelegramLongPollingBot {
     private String adminChatId;
 
     private final OrderService orderService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public OrderBot(OrderService orderService) {
+    public OrderBot(OrderService orderService, SimpMessagingTemplate messagingTemplate) {
         this.orderService = orderService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @Override
@@ -56,17 +59,26 @@ public class OrderBot extends TelegramLongPollingBot {
             Long orderId = Long.parseLong(parts[1]);
 
             if ("confirm".equals(action)) {
-                orderService.updateOrderStatus(orderId, Order.OrderStatus.IN_TRANSIT);
+                Order order = orderService.updateOrderStatus(orderId, Order.OrderStatus.IN_TRANSIT);
+                notifyUser(order.getUser().getId());
                 updateStatusWithButtons(chatId, (int) messageId,
                         "🚚 Заказ #" + orderId + " сейчас в пути.\nНажмите кнопку ниже, когда доставите его.",
                         createInTransitMarkup(orderId));
             } else if ("delivered".equals(action)) {
-                orderService.updateOrderStatus(orderId, Order.OrderStatus.DELIVERED);
+                Order order = orderService.updateOrderStatus(orderId, Order.OrderStatus.DELIVERED);
+                notifyUser(order.getUser().getId());
                 editStatus(chatId, (int) messageId, "✅ Заказ #" + orderId + " успешно завершен и доставлен.");
             } else if ("reject".equals(action)) {
-                orderService.updateOrderStatus(orderId, Order.OrderStatus.REJECTED);
+                Order order = orderService.updateOrderStatus(orderId, Order.OrderStatus.REJECTED);
+                notifyUser(order.getUser().getId());
                 editStatus(chatId, (int) messageId, "❌ Заказ #" + orderId + " был отклонен администратором.");
             }
+        }
+    }
+
+    private void notifyUser(Long userId) {
+        if (userId != null) {
+            messagingTemplate.convertAndSend("/topic/orders/" + userId, "updated");
         }
     }
 

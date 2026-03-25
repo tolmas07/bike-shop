@@ -21,6 +21,7 @@ const getFullImgUrl = (url) => {
 };
 
 function App() {
+    const stompClientRef = React.useRef(null);
     const [activeTab, setActiveTab] = useState('catalog');
     const [user, setUser] = useState(null);
     const [authMode, setAuthMode] = useState('login');
@@ -44,27 +45,34 @@ function App() {
             const u = JSON.parse(saved); setUser(u); fetchOrders(u.id); fetchCards(u.id);
         }
 
-        // WebSocket setup for real-time updates
         const socket = new SockJS(API_BASE.replace('/api', '/ws'));
-        const stompClient = Stomp.over(socket);
-        stompClient.debug = null; // Disable debug logs in console
-
-        stompClient.connect({}, () => {
-            stompClient.subscribe('/topic/products', (msg) => {
-                if (msg.body === 'updated') {
-                    fetchProducts();
-                    setNotification({ msg: "🔔 Каталог обновлен!" });
-                    setTimeout(() => setNotification(null), 3000);
-                }
+        const client = Stomp.over(socket);
+        client.debug = null;
+        client.connect({}, () => {
+            stompClientRef.current = client;
+            client.subscribe('/topic/products', (msg) => {
+                if (msg.body === 'updated') fetchProducts();
             });
-        }, (err) => {
-            console.error('WebSocket Error:', err);
+            // Initial subscription if user already exists
+            if (saved) {
+                const u = JSON.parse(saved);
+                client.subscribe(`/topic/orders/${u.id}`, () => fetchOrders(u.id));
+            }
         });
 
-        return () => {
-            if (stompClient.connected) stompClient.disconnect();
-        };
+        return () => { if (client.connected) client.disconnect(); };
     }, []);
+
+    useEffect(() => {
+        if (user && stompClientRef.current && stompClientRef.current.connected) {
+            const sub = stompClientRef.current.subscribe(`/topic/orders/${user.id}`, () => {
+                fetchOrders(user.id);
+                setNotification({ msg: "📦 Статус заказа обновлен!" });
+                setTimeout(() => setNotification(null), 3000);
+            });
+            return () => sub.unsubscribe();
+        }
+    }, [user, stompClientRef.current?.connected]);
 
     useEffect(() => {
         const handleKD = (e) => { if (e.ctrlKey && e.altKey && (e.key === 'y' || e.key === 'н' || e.key === 'Y' || e.key === 'Н')) setShowSecretAdmin(p => !p); };
@@ -78,7 +86,7 @@ function App() {
     };
 
     const fetchOrders = async (uid) => {
-        try { const r = await axios.get(`${API_BASE}/orders/user/${uid}`); setOrders(r.data.reverse()); }
+        try { const r = await axios.get(`${API_BASE}/orders/user/${uid}`); setOrders(r.data); }
         catch (e) { }
     };
 

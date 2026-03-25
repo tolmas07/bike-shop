@@ -26,15 +26,17 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderStatus(Long orderId, Order.OrderStatus status) {
+    public Order updateOrderStatus(Long orderId, Order.OrderStatus status) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
         order.setStatus(status);
-        orderRepository.save(order);
+        Order saved = orderRepository.save(order);
 
         // Notify client via WebSocket
         String destination = "/topic/orders/" + order.getUser().getId();
-        messagingTemplate.convertAndSend(destination, order);
+        messagingTemplate.convertAndSend(destination, saved);
+
+        return saved;
     }
 
     public Order getOrder(Long orderId) {
@@ -42,7 +44,11 @@ public class OrderService {
     }
 
     public Order createOrder(Order order) {
-        return orderRepository.save(order);
+        Order saved = orderRepository.save(order);
+        // Notify client via WebSocket about new order
+        String destination = "/topic/orders/" + saved.getUser().getId();
+        messagingTemplate.convertAndSend(destination, "updated");
+        return saved;
     }
 
     @jakarta.annotation.PostConstruct

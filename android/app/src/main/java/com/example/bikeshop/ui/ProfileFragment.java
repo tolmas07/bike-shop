@@ -35,6 +35,11 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ProfileFragment extends Fragment {
 
@@ -45,6 +50,8 @@ public class ProfileFragment extends Fragment {
     private OrderAdapter adapter;
     private Long currentUserId;
     private User currentUserObj;
+    private StompClient stompClient;
+    private CompositeDisposable compositeDisposable;
     private static final String TAG = "ProfileFragment";
 
     @Nullable
@@ -88,7 +95,33 @@ public class ProfileFragment extends Fragment {
         loadUserCards();
         loadOrderHistory();
         
+        connectWebSocket();
+        
         return view;
+    }
+
+    private void connectWebSocket() {
+        if (currentUserId == -1L || stompClient != null) return;
+        
+        compositeDisposable = new CompositeDisposable();
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, "wss://bikeshop-backend.onrender.com/ws-raw/websocket");
+        
+        compositeDisposable.add(stompClient.topic("/topic/orders/" + currentUserId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    loadOrderHistory();
+                    Toast.makeText(getContext(), "📦 Заказ обновлен!", Toast.LENGTH_SHORT).show();
+                }, throwable -> Log.e(TAG, "WS Error", throwable)));
+
+        stompClient.connect();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (stompClient != null) stompClient.disconnect();
+        if (compositeDisposable != null) compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override
