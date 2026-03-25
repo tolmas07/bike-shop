@@ -307,7 +307,9 @@ function App() {
         .mobile-bottom-nav { display: none; }
 
         @media (max-width: 768px) {
-            .container { padding: 0 20px; }
+            html, body { overflow-x: hidden !important; width: 100vw; position: relative; }
+            .app { overflow-x: hidden !important; width: 100vw; }
+            .container { padding: 0 16px !important; width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; }
             .desktop-nav { display: none; }
             .logo { width: 100%; text-align: center; font-size: 18px !important; }
             .mobile-bottom-nav { 
@@ -320,24 +322,24 @@ function App() {
             .m-nav-item span { font-size: 10px; font-weight: 800; text-transform: uppercase; }
             .m-badge { position: absolute; top: -5px; right: -10px; background: #000; color: #fff; font-size: 8px; width: 15px; height: 15px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 900; }
             
-            .catalog-container { padding: 24px 0 !important; }
-            .catalog-header { flex-direction: column; align-items: flex-start !important; gap: 32px; margin-bottom: 32px !important; }
-            .hero-title { font-size: 40px !important; }
-            .sort-box { flex-direction: column; align-items: flex-start !important; gap: 15px !important; }
+            .catalog-container { padding: 16px 0 !important; width: 100%; overflow-x: hidden; }
+            .catalog-header { flex-direction: column; align-items: flex-start !important; gap: 24px; margin-bottom: 24px !important; }
+            .hero-title { font-size: 32px !important; letter-spacing: -2px !important; }
+            .sort-box { flex-direction: column; align-items: flex-start !important; gap: 12px !important; width: 100%; }
             
-            .catalog-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
-            .cat-chips { overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin: 0 -20px 24px -20px; padding-left: 20px; border-bottom: none; display: flex; gap: 10px; }
+            .catalog-grid { grid-template-columns: 1fr !important; gap: 20px; width: 100%; }
+            .cat-chips { overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin: 0 -16px 20px -16px; padding-left: 16px; display: flex; gap: 10px; width: 100vw; }
             .cat-chips::-webkit-scrollbar { display: none; }
-            .cat-chip { padding: 8px 18px; font-size: 10px; }
+            .cat-chip { padding: 8px 16px; font-size: 10px; flex-shrink: 0; }
             
-            .payment-modal { width: 100%; height: auto; min-height: 50vh; position: fixed; bottom: 0; left: 0; border-radius: 40px 40px 0 0; padding: 32px 20px; box-shadow: 0 -20px 50px rgba(0,0,0,0.1); }
-            .payment-header h3 { font-size: 22px; }
-            .payment-select-item { padding: 20px; }
+            .payment-modal { width: 100% !important; height: auto; min-height: 50vh; position: fixed; bottom: 0; left: 0; border-radius: 32px 32px 0 0; padding: 32px 16px; box-shadow: 0 -20px 50px rgba(0,0,0,0.1); }
+            .payment-header h3 { font-size: 20px; }
+            .payment-select-item { padding: 18px; }
             .viz-num-text { font-size: 14px; }
             
-            .admin-row-v2 { grid-template-columns: 1fr !important; gap: 15px; padding: 24px; background: #f9f9f9; border-radius: 20px; margin-bottom: 12px; }
+            .admin-row-v2 { grid-template-columns: 1fr !important; gap: 15px; padding: 20px; background: #f9f9f9; border-radius: 20px; margin-bottom: 12px; width: 100%; box-sizing: border-box; }
             .admin-row-v2 img { width: 100% !important; height: 180px !important; object-fit: cover; }
-            .secret-admin-modal { width: 100vw; height: 100vh; border-radius: 0; padding: 24px; }
+            .secret-admin-modal { width: 100vw; height: 100vh; border-radius: 0; padding: 16px; }
             .admin-header-row { display: none !important; }
         }
       `}</style>
@@ -396,8 +398,8 @@ const AdminPanel = ({ products, onUpdate }) => {
                     <div key={p.id} className="admin-row-v2" style={{ alignItems: 'flex-start' }}>
                         <img src={getFullImgUrl(p.imageUrl)} style={{ width: '60px', height: '60px', borderRadius: '14px', objectFit: 'cover', border: '1px solid #eee', marginTop: '10px' }} />
                         {editMode === p.id ? (
-                            <div style={{ gridColumn: '2 / span 4', display: 'grid' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr', gap: '10px' }}>
+                            <div className="admin-edit-box">
+                                <div className="admin-edit-grid">
                                     <input className="u-input" value={editF.name} onChange={e => setEditF({ ...editF, name: e.target.value })} placeholder="Название" />
                                     <select className="u-select" style={{ height: '44px', marginTop: '5px' }} value={editF.category} onChange={e => setEditF({ ...editF, category: e.target.value })}>
                                         {CATEGORIES.slice(1).map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
@@ -405,9 +407,9 @@ const AdminPanel = ({ products, onUpdate }) => {
                                     <input className="u-input" type="number" value={editF.price} onChange={e => setEditF({ ...editF, price: e.target.value })} placeholder="Цена" />
                                     <input className="u-input" type="number" value={editF.stock} onChange={e => setEditF({ ...editF, stock: e.target.value })} placeholder="Склад" />
                                 </div>
-                                <div style={{ display: 'flex', gap: '10px', marginTop: '10px', alignItems: 'center' }}>
-                                    <input className="u-input" style={{ flex: 1 }} value={editF.imageUrl} onChange={e => setEditF({ ...editF, imageUrl: e.target.value })} placeholder="URL картинки" />
-                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                <div className="admin-edit-meta">
+                                    <input className="u-input edit-url-input" value={editF.imageUrl} onChange={e => setEditF({ ...editF, imageUrl: e.target.value })} placeholder="URL картинки" />
+                                    <div className="admin-edit-actions">
                                         <button className="btn" style={{ padding: '12px', background: '#000' }} onClick={() => save(p.id)}><Save size={18} /></button>
                                         <button className="btn btn-secondary" style={{ padding: '12px' }} onClick={() => setEditMode(null)}><X size={18} /></button>
                                     </div>
