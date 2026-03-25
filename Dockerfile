@@ -9,5 +9,5 @@ RUN mvn -f backend/pom.xml clean package -DskipTests
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/backend/target/bikeshop-0.0.1-SNAPSHOT.jar app.jar
-EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar", "--server.port=${PORT:8080}"]
