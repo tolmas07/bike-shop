@@ -1,0 +1,253 @@
+<!-- Экран профиля пользователя. Использует NestedScrollView, чтобы всё содержимое (адрес, карты, история) можно было прокручивать целиком. -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Основной заголовок секции профиля. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="24dp"
+            android:text="ПРОФИЛЬ"
+            android:textColor="#000000"
+            android:textSize="32sp" />
+
+        <!-- Секция ввода данных адреса доставки. Сохраняется в профиле пользователя в базе. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ДАННЫЕ ДОСТАВКИ"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Горизонтальный ряд для Города и Улицы. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/et_city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Город"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#000000"
+                android:background="@drawable/bg_badge_light"
+                android:padding="12dp"
+                android:layout_marginEnd="4dp"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_street"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Улица"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#000000"
+                android:background="@drawable/bg_badge_light"
+                android:padding="12dp"
+                android:layout_marginStart="4dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Ряд для Дома и Квартиры. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginBottom="16dp">
+
+            <EditText
+                android:id="@+id/et_house"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Дом"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#000000"
+                android:background="@drawable/bg_badge_light"
+                android:padding="12dp"
+                android:layout_marginEnd="4dp"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_apartment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Кв"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#000000"
+                android:background="@drawable/bg_badge_light"
+                android:padding="12dp"
+                android:layout_marginStart="4dp"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Поле для ввода номера телефона. -->
+        <EditText
+            android:id="@+id/et_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="+375 Телефон"
+            android:textColorHint="#AAAAAA"
+            android:textColor="#000000"
+            android:background="@drawable/bg_badge_light"
+            android:padding="12dp"
+            android:textSize="14sp"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Кнопка сохранения данных профиля на сервер. -->
+        <Button
+            android:id="@+id/btn_save_profile"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="СОХРАНИТЬ АДРЕС"
+            app:cornerRadius="4dp"
+            android:backgroundTint="#000000"
+            android:textColor="#FFFFFF" />
+
+        <!-- Секция управления банковскими картами. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="КАРТЫ ОПЛАТЫ"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            android:letterSpacing="0.05"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Контейнер, куда программно добавляются привязанные карты. -->
+        <LinearLayout
+            android:id="@+id/layout_cards_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Сюда вставляются строки с картами через Java -->
+        </LinearLayout>
+
+        <!-- Форма добавления новой платежной карты. -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_badge_light"
+            android:padding="16dp"
+            android:layout_marginTop="8dp">
+
+            <EditText
+                android:id="@+id/et_card_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0000 0000 0000 0000"
+                android:textColorHint="#AAAAAA"
+                android:textColor="#000000"
+                android:background="#FFFFFF"
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:inputType="number"
+                android:maxLength="19"
+                android:digits="0123456789 "
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/et_card_expiry"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="ММ/ГГ"
+                    android:textColorHint="#AAAAAA"
+                    android:textColor="#000000"
+                    android:background="#FFFFFF"
+                    android:padding="10dp"
+                    android:layout_marginEnd="4dp"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:digits="0123456789/"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/et_card_cvv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="CVV"
+                    android:textColorHint="#AAAAAA"
+                    android:textColor="#000000"
+                    android:background="#FFFFFF"
+                    android:padding="10dp"
+                    android:layout_marginStart="4dp"
+                    android:inputType="numberPassword"
+                    android:maxLength="3"
+                    android:digits="0123456789"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_add_card"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="ПРИВЯЗАТЬ КАРТУ"
+                app:cornerRadius="4dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="#000000"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <!-- Секция истории заказов. -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ИСТОРИЯ ЗАКАЗОВ"
+            android:textColor="#888888"
+            android:textSize="12sp"
+            android:letterSpacing="0.05"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Список заказов. Имеет фиксированную высоту 400dp и собственную прокрутку, 
+             чтобы страница профиля не была слишком длинной. -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_orders"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:nestedScrollingEnabled="true"
+            android:layout_marginBottom="32dp" />
+
+        <!-- Кнопка Выхода из аккаунта. Очищает SharedPreferences и возвращает на логин. -->
+        <Button
+            android:id="@+id/btn_logout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="32dp"
+            android:text="ВЫЙТИ ИЗ АККАУНТА"
+            android:textColor="#FF4D4D"
+            app:cornerRadius="4dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

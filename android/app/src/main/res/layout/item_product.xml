@@ -1,0 +1,119 @@
+<!-- Шаблон карточки товара (один велосипед в списке). 
+     Использует MaterialCardView для создания эффекта карточки с закругленными углами и тенью. -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#F0F0F0"
+    app:strokeWidth="1dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="12dp">
+
+        <!-- Изображение товара. Режим scaleType="centerCrop" обрезает картинку по размеру без искажений. -->
+        <ImageView
+            android:id="@+id/img_product"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
+            android:background="#F8F8F8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Кнопка "Сердечко" (В избранное). Накладывается поверх изображения справа сверху. -->
+        <ImageButton
+            android:id="@+id/btn_add_to_fav"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_circle_light"
+            android:src="@drawable/ic_heart_outline"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#FF4D4D" />
+
+        <!-- Категория товара (ГОРОДСКИЕ, ГОРНЫЕ и т.д.). Маленький серый шрифт. -->
+        <TextView
+            android:id="@+id/tv_product_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="12dp"
+            android:text="CATEGORY"
+            android:textColor="#999999"
+            android:textSize="10sp"
+            android:letterSpacing="0.05"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/img_product" />
+
+        <!-- Название велосипеда. Жирный шрифт, обрезается многоточием, если слишком длинное. -->
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Product Name"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_category" />
+
+        <!-- Цена товара. -->
+        <TextView
+            android:id="@+id/tv_product_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="8dp"
+            android:text="100 000 ₽"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_name" />
+
+        <!-- Бейдж "НЕТ В НАЛИЧИИ". Виден только если товара нет на складе. -->
+        <TextView
+            android:id="@+id/tv_badge_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="НЕТ В НАЛИЧИИ"
+            android:textColor="#AAAAAA"
+            android:textSize="9sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_product_price" />
+
+        <!-- Кнопка "Плюс" (В корзину). Находится справа снизу. -->
+        <ImageButton
+            android:id="@+id/btn_add_to_cart"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_order_status"
+            android:backgroundTint="#000000"
+            android:src="@drawable/ic_plus"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="@id/tv_product_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_product_price"
+            app:tint="#FFFFFF" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

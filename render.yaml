@@ -1,0 +1,55 @@
+services:
+  # ─────────────────────────────────────────
+  #  BACKEND  (Spring Boot via Docker)
+  # ─────────────────────────────────────────
+  - type: web
+    name: bikeshop-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: PORT
+        value: 8081
+      # Render injects the internal URL here automatically.
+      # You must set SPRING_DATASOURCE_URL manually in the dashboard
+      # once you create a MySQL database (e.g. on Aiven or PlanetScale).
+      - key: SPRING_DATASOURCE_URL
+        sync: false          # fill in Render dashboard
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_DATABASE_PLATFORM
+        value: org.hibernate.dialect.MySQL8Dialect
+      - key: TELEGRAM_BOT_USERNAME
+        value: Diplom_zakazi_bot
+      - key: TELEGRAM_BOT_TOKEN
+        value: 8791676846:AAH7GgTObjAeEqdAI7wqDif-YaFuWB_Hnhg
+      - key: TELEGRAM_ADMIN_CHATID
+        value: "1039005229"
+      # ALLOWED_ORIGINS is updated after the frontend is deployed.
+      # Put your Render frontend URL here (e.g. https://bikeshop-web.onrender.com).
+      - key: ALLOWED_ORIGINS
+        sync: false          # fill in Render dashboard after frontend deploy
+
+  # ─────────────────────────────────────────
+  #  FRONTEND  (Vite / React → static site)
+  # ─────────────────────────────────────────
+  - type: web
+    name: bikeshop-web
+    runtime: static
+    buildCommand: cd web && npm install && npm run build
+    staticPublishPath: web/dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      # Set this to your backend Render URL after backend is deployed,
+      # e.g. https://bikeshop-backend.onrender.com/api
+      - key: VITE_API_BASE_URL
+        sync: false          # fill in Render dashboard
