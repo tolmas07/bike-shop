@@ -214,14 +214,14 @@ function App() {
 
                         <div className="cards-list">
                             {userCards.map(card => (
-                                <div key={card.id} className="payment-card-item" onClick={() => handlePay(card.id)}>
-                                    <div className="card-viz">
-                                        <div className="viz-chip"></div>
-                                        <div className="viz-num">•••• {card.cardNumber.slice(-4)}</div>
+                                <div key={card.id} className="payment-select-item" onClick={() => handlePay(card.id)}>
+                                    <div className="card-viz-new">
+                                        <div className="viz-chip-gold"></div>
+                                        <div className="viz-number-text">•••• {card.cardNumber.slice(-4)}</div>
                                     </div>
-                                    <div className="card-meta">
-                                        <span className="card-vendor">Debit Card</span>
-                                        <ChevronRight size={16} />
+                                    <div className="card-meta-new">
+                                        <span className="card-lbl">Select Card</span>
+                                        <ChevronRight size={18} />
                                     </div>
                                 </div>
                             ))}
@@ -255,18 +255,18 @@ function App() {
         .card-actions { display: flex; gap: 8px; margin-top: 12px; }
         .fav-heart { background: #f8f8f8; width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .fav-heart:hover { background: #eee; }
-        .payment-modal { background: #fff; width: 420px; padding: 40px; border-radius: 32px; box-shadow: 0 50px 100px rgba(0,0,0,0.1); }
-        .payment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
-        .payment-header h3 { font-size: 24px; font-weight: 900; margin: 0; }
-        .payment-header p { font-size: 13px; color: #888; margin: 4px 0 0 0; }
-        .cards-list { display: grid; gap: 12px; }
-        .payment-card-item { background: #111; color: #fff; padding: 24px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.2, 0, 0, 1); }
-        .payment-card-item:hover { transform: scale(1.02); background: #000; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
-        .card-viz { display: flex; flex-direction: column; gap: 8px; }
-        .viz-chip { width: 35px; height: 25px; background: linear-gradient(135deg, #f1c40f, #f39c12); border-radius: 6px; opacity: 0.8; }
-        .viz-num { font-size: 16px; font-weight: 900; letter-spacing: 2px; }
-        .card-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; opacity: 0.4; }
-        .card-vendor { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .payment-modal { background: #fff; width: 440px; padding: 48px; border-radius: 40px; box-shadow: 0 60px 150px rgba(0,0,0,0.15); border: 1px solid #f0f0f0; }
+        .payment-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+        .payment-header h3 { font-size: 28px; font-weight: 900; margin: 0; letter-spacing: -1px; }
+        .payment-header p { font-size: 14px; color: #999; margin: 6px 0 0 0; }
+        .cards-list { display: grid; gap: 16px; }
+        .payment-select-item { background: #1a1a1a; color: #fff; padding: 28px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid transparent; }
+        .payment-select-item:hover { transform: translateY(-5px) scale(1.02); background: #000; box-shadow: 0 30px 60px rgba(0,0,0,0.3); border-color: #333; }
+        .card-viz-new { display: flex; flex-direction: column; gap: 10px; }
+        .viz-chip-gold { width: 40px; height: 30px; background: linear-gradient(135deg, #ffd700, #daa520); border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .viz-number-text { font-size: 18px; font-weight: 900; letter-spacing: 3px; font-family: 'Courier New', monospace; }
+        .card-meta-new { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        .card-lbl { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; opacity: 0.5; }
         .u-input, .u-select { outline: none; transition: 0.2s; border: 1px solid #eee; padding: 12px; border-radius: 12px; width: 100%; font-size: 13px; margin-top: 5px; background: #fff; color: #000; }
         .u-input:focus, .u-select:focus { border-color: #000 !important; }
         .toast { position: fixed; bottom: 30px; right: 30px; background: #111; color: #fff; padding: 15px 25px; border-radius: 16px; display: flex; gap: 12px; align-items: center; z-index: 3000; }
