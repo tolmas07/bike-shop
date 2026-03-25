@@ -1,7 +1,0 @@
-com\example\bikeshop\entity\Product.class
-com\example\bikeshop\entity\User.class
-com\example\bikeshop\entity\Order.class
-com\example\bikeshop\entity\OrderItem.class
-com\example\bikeshop\repository\OrderRepository.class
-com\example\bikeshop\entity\User$Role.class
-com\example\bikeshop\entity\Order$OrderStatus.class
