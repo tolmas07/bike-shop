@@ -42,8 +42,10 @@
 ### 5. Запуск Android
 1. Откройте папку `android` в Android Studio.
 2. Убедитесь, что эмулятор запущен.
-3. Запустите приложение. В эмуляторе для доступа к серверу используется `http://10.0.2.2:8080`.
+3. Запустите приложение. Приложение подключается к продакшн бэкенду `https://bikeshop-backend-98es.onrender.com`.
 4. Нажмите «Оплатить», чтобы увидеть анимацию платежа и создание заказа.
+
+> Для сборки APK: **Build → Build APK(s)** → файл будет в `app/build/outputs/apk/debug/app-debug.apk`
 
 ## Основные возможности
 - **Каталог**: Динамическая подгрузка из БД.
@@ -74,6 +76,16 @@ $env:TELEGRAM_ADMIN_CHATID='1039005229'
 mvn spring-boot:run
 ```
 
+## Продакшн (текущее развёртывание)
+
+| Компонент | Сервис | URL |
+|-----------|--------|-----|
+| Фронтенд (React) | **Vercel** | https://bike-shop-flax.vercel.app |
+| Бэкенд (Spring Boot) | **Render.com** | https://bikeshop-backend-98es.onrender.com |
+| База данных (MySQL) | **Aiven.io** | mysql-6f15d11-tolmasofficial-bd91.f.aivencloud.com:13235 |
+
+> ⚠️ Render.com (бесплатный план) засыпает после 15 мин неактивности — первый запрос может идти ~50 сек.
+
 ## Размещение в облаке (быстрый старт)
 ### 1) Render.com
 1. Создайте сервис "Web Service" для `backend`.
@@ -91,32 +103,16 @@ mvn spring-boot:run
 
 ## Резервный вариант: Deploy на Render.com (из GitHub)
 
-1. Убедитесь, что проект в <your-repo> на GitHub:
-   - `backend` и `web` папки, `README.md`.
-2. Render: New -> Web Service -> выбрать ваш GitHub репозиторий.
-   - Root Directory: `backend`
-   - Build Command: `./mvnw clean package` (или `mvn clean package`)
-   - Start Command: `java -jar target/*.jar`
-   - Добавить Environment:
-     - `SPRING_DATASOURCE_URL=jdbc:mysql://<host>:<port>/<db>?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true`
-     - `SPRING_DATASOURCE_USERNAME=<user>`
-     - `SPRING_DATASOURCE_PASSWORD=<password>`
-     - `SPRING_JPA_HIBERNATE_DDL_AUTO=update`
-     - `SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect`
-     - `TELEGRAM_BOT_USERNAME=<bot>` (если используется)
-     - `TELEGRAM_BOT_TOKEN=<token>`
-     - `TELEGRAM_ADMIN_CHATID=<id>`
-   - `server.port` берется автоматически из Render via `PORT` (настройка `backend/src/main/resources/application.properties` уже обновлена).
-3. Render: New -> Static Site -> выбрать тот же репозиторий.
-   - Root Directory: `web`
-   - Build Command: `npm ci && npm run build`
-   - Publish Directory: `dist`
-   - Добавить Environment:
-     - `VITE_API_BASE_URL=https://<backend-service>.onrender.com/api`
-     - `VITE_STOMP_URL=https://<backend-service>.onrender.com/ws`
-4. В коде уже готово:
-   - `web/src/App.jsx`, `web/src/components/*.jsx` используют `import.meta.env.VITE_API_BASE_URL`.
-   - `web/src/hooks/useOrderUpdates.js` использует `VITE_STOMP_URL`.
+1. Убедитесь, что проект в репозитории на GitHub.
+2. Render: New → **Blueprint** → выбрать репозиторий → `render.yaml` подтянется автоматически.
+3. Заполнить переменные вручную:
+   - `SPRING_DATASOURCE_URL`
+   - `SPRING_DATASOURCE_USERNAME`
+   - `SPRING_DATASOURCE_PASSWORD`
+   - `ALLOWED_ORIGINS=https://bike-shop-flax.vercel.app`
+4. После деплоя бэкенда добавить в Vercel:
+   - `VITE_API_BASE_URL=https://<backend>.onrender.com/api`
+   - `VITE_STOMP_URL=https://<backend>.onrender.com/ws`
 
 ## Локально запуск
 
