@@ -43,7 +43,6 @@ services:
     runtime: static
     buildCommand: cd web && npm install && npm run build
     staticPublishPath: web/dist
-    plan: free
     routes:
       - type: rewrite
         source: /*
