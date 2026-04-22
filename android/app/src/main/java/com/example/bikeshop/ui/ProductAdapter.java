@@ -24,7 +24,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     // Fallback image from the website (Unsplash)
     private static final String FALLBACK_IMAGE = "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=600&q=80";
     // Base URL for production products (local assets stored on server)
-    private static final String IMAGE_BASE_URL = "https://bikeshop-backend.onrender.com/images/";
+    private static final String IMAGE_BASE_URL = "https://bikeshop-backend-98es.onrender.com/images/";
     private boolean isFavoriteMode = false;
 
     public interface OnProductClickListener {

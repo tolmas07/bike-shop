@@ -6,7 +6,7 @@ import okio.ByteString;
 
 public class WebSocketManager {
 
-    private static final String WS_URL = "ws://192.168.0.7:8080/ws-bike-shop/websocket";
+    private static final String WS_URL = "wss://bikeshop-backend-98es.onrender.com/ws/websocket";
     private OkHttpClient client;
     private WebSocket webSocket;
     private OnMessageListener listener;
