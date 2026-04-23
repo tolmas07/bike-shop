@@ -81,8 +81,16 @@ function App() {
     }, []);
 
     const fetchProducts = async () => {
-        try { const r = await axios.get(`${API_BASE}/products`); setProducts(r.data); }
-        catch (e) { console.error('P-Fetch Error:', e); }
+        const CACHE_KEY = 'bikeshop_products_cache';
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            try { setProducts(JSON.parse(cached)); } catch {}
+        }
+        try {
+            const r = await axios.get(`${API_BASE}/products`);
+            setProducts(r.data);
+            localStorage.setItem(CACHE_KEY, JSON.stringify(r.data));
+        } catch (e) { console.error('P-Fetch Error:', e); }
     };
 
     const fetchOrders = async (uid) => {

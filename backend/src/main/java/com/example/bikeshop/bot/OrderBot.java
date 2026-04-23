@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +31,26 @@ public class OrderBot extends TelegramLongPollingBot {
     @Value("${telegram.admin.chatId}")
     private String adminChatId;
 
+    @Value("${telegram.webhook.url}")
+    private String webhookUrl;
+
     private final OrderService orderService;
     private final SimpMessagingTemplate messagingTemplate;
 
     public OrderBot(OrderService orderService, SimpMessagingTemplate messagingTemplate) {
         this.orderService = orderService;
         this.messagingTemplate = messagingTemplate;
+    }
+
+    @PostConstruct
+    public void registerWebhook() {
+        try {
+            SetWebhook setWebhook = SetWebhook.builder().url(webhookUrl).build();
+            Boolean result = execute(setWebhook);
+            System.out.println("LOG: Telegram webhook registered: " + webhookUrl + " — " + result);
+        } catch (TelegramApiException e) {
+            System.err.println("Failed to register Telegram webhook: " + e.getMessage());
+        }
     }
 
     @Override
