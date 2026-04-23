@@ -26,6 +26,7 @@ function App() {
     const [user, setUser] = useState(null);
     const [authMode, setAuthMode] = useState('login');
     const [products, setProducts] = useState([]);
+    const [productsLoading, setProductsLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [userCards, setUserCards] = useState([]);
     const [cart, setCart] = useState([]);
@@ -39,6 +40,7 @@ function App() {
     const [sortOrder, setSortOrder] = useState('none');
 
     useEffect(() => {
+        axios.get(`${API_BASE}/ping`).catch(() => {});
         fetchProducts();
         const saved = localStorage.getItem('user');
         if (saved) {
@@ -84,13 +86,17 @@ function App() {
         const CACHE_KEY = 'bikeshop_products_cache';
         const cached = localStorage.getItem(CACHE_KEY);
         if (cached) {
-            try { setProducts(JSON.parse(cached)); } catch {}
+            try {
+                const parsed = JSON.parse(cached);
+                if (parsed.length > 0) { setProducts(parsed); setProductsLoading(false); }
+            } catch {}
         }
         try {
             const r = await axios.get(`${API_BASE}/products`);
             setProducts(r.data);
+            setProductsLoading(false);
             localStorage.setItem(CACHE_KEY, JSON.stringify(r.data));
-        } catch (e) { console.error('P-Fetch Error:', e); }
+        } catch (e) { console.error('P-Fetch Error:', e); setProductsLoading(false); }
     };
 
     const fetchOrders = async (uid) => {
@@ -200,6 +206,7 @@ function App() {
                             {activeTab === 'catalog' && (
                                 <Catalog
                                     products={filteredProducts}
+                                    productsLoading={productsLoading}
                                     selectedCat={selectedCat}
                                     setSelectedCat={setSelectedCat}
                                     sortOrder={sortOrder}
@@ -277,6 +284,11 @@ function App() {
         .modal { background: #fff; width: 360px; padding: 32px; border-radius: 24px; border: 1px solid #f0f0f0; }
         .spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
         @keyframes spin { to {transform: rotate(360deg)} }
+        @keyframes shimmer { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 600px 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+        .skeleton-img { width: 100%; height: 240px; border-radius: 0; }
+        .skeleton-line { height: 16px; border-radius: 8px; }
+        .skeleton-btn { width: 100%; height: 44px; border-radius: 14px; }
         .catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
         .bike-card { background: #fff; border-radius: 24px; border: 1px solid #f2f2f2; overflow: hidden; padding-bottom: 24px; position: relative; transition: 0.3s; }
         .bike-card:hover { transform: translateY(-8px); border-color: #000; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
@@ -486,7 +498,7 @@ const AdminPanel = ({ products, onUpdate }) => {
     );
 };
 
-const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrder, onAdd, onFav, favs }) => (
+const Catalog = ({ products, productsLoading, selectedCat, setSelectedCat, sortOrder, setSortOrder, onAdd, onFav, favs }) => (
     <div className="catalog-container">
         <div className="catalog-header">
             <div className="cat-title-box">
@@ -512,7 +524,14 @@ const Catalog = ({ products, selectedCat, setSelectedCat, sortOrder, setSortOrde
         </div>
 
         <div className="catalog-grid">
-            {products.length === 0 ? <p style={{ padding: '60px 0', fontSize: '18px', color: '#ccc' }}>В этой категории товаров пока нет</p> : products.map(p => (
+            {productsLoading ? Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="bike-card skeleton-card">
+                    <div className="skeleton skeleton-img" />
+                    <div className="skeleton skeleton-line" style={{ width: '60%', marginTop: '14px' }} />
+                    <div className="skeleton skeleton-line" style={{ width: '40%', marginTop: '8px' }} />
+                    <div className="skeleton skeleton-btn" style={{ marginTop: '16px' }} />
+                </div>
+            )) : products.length === 0 ? <p style={{ padding: '60px 0', fontSize: '18px', color: '#ccc' }}>В этой категории товаров пока нет</p> : products.map(p => (
                 <div key={p.id} className="bike-card">
                     <div className="stock-badge">{p.stock > 0 ? `STOCK: ${p.stock}` : 'SOLD OUT'}</div>
                     <img src={getFullImgUrl(p.imageUrl)} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
