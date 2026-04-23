@@ -42,7 +42,7 @@
 ### 5. Запуск Android
 1. Откройте папку `android` в Android Studio.
 2. Убедитесь, что эмулятор запущен.
-3. Запустите приложение. Приложение подключается к продакшн бэкенду `https://bikeshop-backend-98es.onrender.com`.
+3. Запустите приложение. Приложение подключается к продакшн бэкенду `[https://bikeshop-backend-98es.onrender.com](https://dashboard.render.com/web/srv-d7kbr9favr4c73d50nqg)`.
 4. Нажмите «Оплатить», чтобы увидеть анимацию платежа и создание заказа.
 
 > Для сборки APK: **Build → Build APK(s)** → файл будет в `app/build/outputs/apk/debug/app-debug.apk`
