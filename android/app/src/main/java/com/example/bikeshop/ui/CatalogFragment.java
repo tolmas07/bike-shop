@@ -89,9 +89,9 @@ public class CatalogFragment extends Fragment {
 
         // Вешаем слушатели на кнопки категорий. При клике вызывается updateCategory.
         btnAll.setOnClickListener(v -> updateCategory("ALL", btnAll));
-        btnCity.setOnClickListener(v -> updateCategory("ГОРОДСКИЕ", btnCity));
-        btnMountain.setOnClickListener(v -> updateCategory("ГОРНЫЕ", btnMountain));
-        btnElectric.setOnClickListener(v -> updateCategory("ЭЛЕКТРО", btnElectric));
+        btnCity.setOnClickListener(v -> updateCategory("city", btnCity));
+        btnMountain.setOnClickListener(v -> updateCategory("mountain", btnMountain));
+        btnElectric.setOnClickListener(v -> updateCategory("electric", btnElectric));
 
         // Настраиваем действия внутри карточки товара: добавление в корзину или избранное.
         adapter.setOnProductClickListener(new ProductAdapter.OnProductClickListener() {
