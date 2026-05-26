@@ -2,6 +2,7 @@ package com.example.bikeshop.controller;
 
 import com.example.bikeshop.entity.User;
 import com.example.bikeshop.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "${ALLOWED_ORIGINS:http://localhost:5173}", allowCredentials = "true")
 public class AuthController {
 
     private final UserRepository userRepository;
